@@ -2,6 +2,7 @@
 'use strict'
 
 const chai = require('chai')
+chai.use(require('chai-as-promised'))
 chai.use(require('dirty-chai'))
 const expect = chai.expect
 const pull = require('pull-stream/pull')
@@ -27,16 +28,14 @@ describe('builder: onlyHash', () => {
   })
 
   it('will only chunk and hash if passed an "onlyHash" option', (done) => {
-    const onCollected = (err, nodes) => {
+    const onCollected = async (err, nodes) => {
       if (err) return done(err)
 
       const node = nodes[0]
       expect(node).to.exist()
 
-      ipld.get(new CID(node.multihash), (err, res) => {
-        expect(err).to.exist()
-        done()
-      })
+      const cid = new CID(node.multihash)
+      expect(ipld.get(cid)).to.be.rejectedWith('Not Found').notify(done)
     }
 
     const content = String(Math.random() + Date.now())

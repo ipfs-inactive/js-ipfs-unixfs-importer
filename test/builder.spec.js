@@ -52,12 +52,14 @@ describe('builder', () => {
         expect(mh.decode(cid.multihash).name).to.equal(hashAlg)
 
         // Fetch using hashAlg encoded multihash
-        ipld.get(cid, (err, res) => {
-          if (err) return cb(err)
-          const content = UnixFS.unmarshal(res.value.data).data
-          expect(content.equals(inputFile.content)).to.be.true()
-          cb()
-        })
+        ipld.get(cid).then(
+          (node) => {
+            const content = UnixFS.unmarshal(node.data).data
+            expect(content.equals(inputFile.content)).to.be.true()
+            cb()
+          },
+          (error) => cb(error)
+        )
       }
 
       pull(
@@ -124,12 +126,14 @@ describe('builder', () => {
         expect(mh.decode(cid.multihash).name).to.equal(hashAlg)
 
         // Fetch using hashAlg encoded multihash
-        ipld.get(cid, (err, res) => {
-          if (err) return cb(err)
-          const meta = UnixFS.unmarshal(res.value.data)
-          expect(meta.type).to.equal('directory')
-          cb()
-        })
+        ipld.get(cid).then(
+          (node) => {
+            const meta = UnixFS.unmarshal(node.data)
+            expect(meta.type).to.equal('directory')
+            cb()
+          },
+          (error) => cb(error)
+        )
       }
 
       pull(

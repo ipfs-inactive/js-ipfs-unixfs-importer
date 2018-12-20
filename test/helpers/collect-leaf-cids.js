@@ -15,9 +15,10 @@ module.exports = (ipld, multihash, callback) => {
       return pull(
         values([cid]),
         asyncMap((cid, callback) => {
-          ipld.get(cid, (error, result) => {
-            callback(error, !error && result.value)
-          })
+          ipld.get(cid).then(
+            (node) => callback(null, node),
+            (error) => callback(error)
+          )
         }),
         asyncMap((node, callback) => {
           if (!node.links) {

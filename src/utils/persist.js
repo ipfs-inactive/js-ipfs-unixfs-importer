@@ -1,10 +1,9 @@
 'use strict'
 
 const {
-  util: {
-    cid
-  }
+  util
 } = require('ipld-dag-pb')
+const multicodec = require('multicodec')
 
 const defaultOptions = {
   cidVersion: 0,
@@ -27,7 +26,7 @@ const persist = (node, ipld, options, callback) => {
   }
 
   if (options.onlyHash) {
-    return cid(node, {
+    return util.cid(node, {
       version: cidVersion,
       hashAlg: hashAlg
     }, (err, cid) => {
@@ -38,16 +37,26 @@ const persist = (node, ipld, options, callback) => {
     })
   }
 
-  ipld.put(node, {
-    version: cidVersion,
-    hashAlg: hashAlg,
-    format: codec
-  }, (error, cid) => {
-    callback(error, {
+  // The IPLD expects the format and hashAlg as constants
+  if (typeof codec === 'string') {
+    const constantName = codec.toUpperCase().replace(/-/g, '_')
+    codec = multicodec[constantName]
+  }
+  if (typeof hashAlg === 'string') {
+    const constantName = hashAlg.toUpperCase().replace(/-/g, '_')
+    hashAlg = multicodec[constantName]
+  }
+
+  ipld.put(node, codec, {
+    cidVersion,
+    hashAlg
+  }).then(
+    (cid) => callback(null, {
       cid,
       node
-    })
-  })
+    }),
+    (error) => callback(error)
+  )
 }
 
 module.exports = persist

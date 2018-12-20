@@ -125,9 +125,11 @@ const checkLeafNodeTypes = (ipld, options, expected, done) => {
       importer(ipld, options),
       collect(cb)
     ),
-    (files, cb) => ipld.get(new CID(files[0].multihash), cb),
-    (result, cb) => {
-      const node = result.value
+    (files, cb) => ipld.get(new CID(files[0].multihash)).then(
+      (nodes) => cb(null, nodes),
+      (error) => cb(error)
+    ),
+    (node, cb) => {
       const meta = UnixFs.unmarshal(node.data)
 
       expect(meta.type).to.equal('file')
@@ -137,9 +139,11 @@ const checkLeafNodeTypes = (ipld, options, expected, done) => {
         node.links.map(link => {
           return (done) => {
             waterfall([
-              (next) => ipld.get(link.cid, next),
-              (result, next) => {
-                const node = result.value
+              (cb) => ipld.get(link.cid).then(
+                (node) => cb(null, node),
+                (error) => cb(error)
+              ),
+              (node, next) => {
                 const meta = UnixFs.unmarshal(node.data)
 
                 expect(meta.type).to.equal(expected)
@@ -163,9 +167,11 @@ const checkNodeLinks = (ipld, options, expected, done) => {
       importer(ipld, options),
       collect(cb)
     ),
-    (files, cb) => ipld.get(new CID(files[0].multihash), cb),
-    (result, cb) => {
-      const node = result.value
+    (files, cb) => ipld.get(new CID(files[0].multihash)).then(
+      (nodes) => cb(null, nodes),
+      (error) => cb(error)
+    ),
+    (node, cb) => {
       const meta = UnixFs.unmarshal(node.data)
 
       expect(meta.type).to.equal('file')
@@ -587,10 +593,8 @@ strategies.forEach((strategy) => {
         const file = files[0]
         expect(file).to.exist()
 
-        ipld.get(new CID(file.multihash), (err) => {
-          expect(err).to.exist()
-          done()
-        })
+        const cid = new CID(file.multihash)
+        expect(ipld.get(cid)).to.be.rejectedWith('Not Found').notify(done)
       }
 
       pull(
@@ -658,7 +662,10 @@ strategies.forEach((strategy) => {
 
           // Just check the intermediate directory can be retrieved
           if (!inputFile) {
-            return ipld.get(cid, cb)
+            return ipld.get(new CID(file.multihash)).then(
+              (_cid) => cb(),
+              (_error) => cb()
+            )
           }
 
           // Check the imported content is correct
