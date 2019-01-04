@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/ipfs/js-ipfs-unixfs-importer#readme",
   "devDependencies": {
-    "aegir": "ipfs/aegir#allow-config-of-browser-timeout",
+    "aegir": "^18.0.2",
     "chai": "^4.2.0",
     "detect-node": "^2.0.4",
     "dirty-chai": "^2.0.1",
