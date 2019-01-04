@@ -266,7 +266,7 @@ describe('builder: directory sharding', function () {
     const maxDepth = 3
     let rootHash
 
-    it('imports a big dir', function (done) {
+    it('imports a big dir', (done) => {
       const push = pushable()
       pull(
         push,
