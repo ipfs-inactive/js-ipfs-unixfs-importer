@@ -8,6 +8,7 @@ const chai = require('chai')
 chai.use(require('dirty-chai'))
 const expect = chai.expect
 const IPLD = require('ipld')
+const inMemory = require('ipld-in-memory')
 const pull = require('pull-stream/pull')
 const values = require('pull-stream/sources/values')
 const asyncMap = require('pull-stream/throughs/async-map')
@@ -24,7 +25,7 @@ describe('builder: directory sharding', function () {
   let ipld
 
   before((done) => {
-    IPLD.inMemory((err, resolver) => {
+    inMemory(IPLD, (err, resolver) => {
       expect(err).to.not.exist()
 
       ipld = resolver
