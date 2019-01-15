@@ -2,6 +2,6 @@
 
 module.exports = {
   karma: {
-    browserNoActivityTimeout: 200 * 1000
+    browserNoActivityTimeout: 500 * 1000
   }
 }

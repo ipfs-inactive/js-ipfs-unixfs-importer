@@ -262,7 +262,7 @@ describe('builder: directory sharding', () => {
   })
 
   describe('big nested dir', function () {
-    this.timeout(100 * 1000)
+    this.timeout(450 * 1000)
 
     const maxDirs = 2000
     const maxDepth = 3
