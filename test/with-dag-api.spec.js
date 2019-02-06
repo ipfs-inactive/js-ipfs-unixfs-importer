@@ -32,15 +32,15 @@ const smallFile = loadFixture('test/fixtures/200Bytes.txt')
 const baseFiles = {
   '200Bytes.txt': {
     path: '200Bytes.txt',
-    multihash: 'QmQmZQxSKQppbsWfVzBvg59Cn3DKtsNVQ94bjAxg2h3Lb8',
+    multihash: 'bafybeibeddt74r7hfsred3rupoyk7t3yqrnc6lq2tofkbjyeancgae7yc4',
     size: 211,
     name: '',
     leafSize: 200
   },
   '1.2MiB.txt': {
     path: '1.2MiB.txt',
-    multihash: 'QmbPN6CXXWpejfQgnRYnMQcVYkFHEntHWqLNQjbkatYCh1',
-    size: 1328062,
+    multihash: 'bafybeidye343eoqqq6dbz75kytgafi4jwm2c7tybdlj2xvnj5epthnofmm',
+    size: 1330520,
     name: '',
     leafSize: 1258000
   }
@@ -50,14 +50,14 @@ const strategyBaseFiles = {
   flat: baseFiles,
   balanced: extend({}, baseFiles, {
     '1.2MiB.txt': {
-      multihash: 'QmeEGqUisUD2T6zU96PrZnCkHfXCGuQeGWKu4UoSuaZL3d',
-      size: 1335420
+      multihash: 'bafybeiaxcek2b4eedgyx4jjh4gquaof4beqemzz5ch4rmlsjsr67soz55q',
+      size: 1338154
     }
   }),
   trickle: extend({}, baseFiles, {
     '1.2MiB.txt': {
-      multihash: 'QmaiSohNUt1rBf2Lqz6ou54NHVPTbXbBoPuq9td4ekcBx4',
-      size: 1334599
+      multihash: 'bafybeicsszy6evjc47ldfasv2kh5wydapatazcuantf6nf6iwywftvggjq',
+      size: 1337301
     }
   })
 }
@@ -72,39 +72,39 @@ const strategyOverrides = {
   balanced: {
     'foo-big': {
       path: 'foo-big',
-      multihash: 'QmQ1S6eEamaf4t948etp8QiYQ9avrKCogiJnPRgNkVreLv',
-      size: 1335478
+      multihash: 'bafybeif7nmfq5sl7bvxi4o2kmqvpdri7l7jlgqe5xldeva2bz2xb64seky',
+      size: 1338214
     },
     pim: {
-      multihash: 'QmUpzaN4Jio2GB3HoPSRCMQD5EagdMWjSEGD4SGZXaCw7W',
-      size: 1335744
+      multihash: 'bafybeiaqfwmlhmlvftd7pe3d7fr2nuiwwvcd67zkh3p7u2vq6kg54sp36m',
+      size: 1338482
     },
     'pam/pum': {
-      multihash: 'QmUpzaN4Jio2GB3HoPSRCMQD5EagdMWjSEGD4SGZXaCw7W',
-      size: 1335744
+      multihash: 'bafybeiaqfwmlhmlvftd7pe3d7fr2nuiwwvcd67zkh3p7u2vq6kg54sp36m',
+      size: 1338482
     },
     pam: {
       multihash: 'QmVoVD4fEWFLJLjvRCg4bGrziFhgECiaezp79AUfhuLgno',
-      size: 2671269
+      size: 2676745
     }
   },
   trickle: {
     'foo-big': {
       path: 'foo-big',
-      multihash: 'QmPh6KSS7ghTqzgWhaoCiLoHFPF7HGqUxx7q9vcM5HUN4U',
-      size: 1334657
+      multihash: 'bafybeiauchq6pdjaf4nchxl7gtigktflzvlyiouemk3k5zdetzpbpgsoky',
+      size: 1337361
     },
     pim: {
-      multihash: 'QmPAn3G2x2nrq4A1fu2XUpwWtpqG4D1YXFDrU615NHvJbr',
-      size: 1334923
+      multihash: 'bafybeie3zigxtjsbyxpnhep74zofd5z6j52bpdzoxvptlr6syaqgxqcbui',
+      size: 1337629
     },
     'pam/pum': {
-      multihash: 'QmPAn3G2x2nrq4A1fu2XUpwWtpqG4D1YXFDrU615NHvJbr',
-      size: 1334923
+      multihash: 'bafybeie3zigxtjsbyxpnhep74zofd5z6j52bpdzoxvptlr6syaqgxqcbui',
+      size: 1337629
     },
     pam: {
       multihash: 'QmZTJah1xpG9X33ZsPtDEi1tYSHGDqQMRHsGV5xKzAR2j4',
-      size: 2669627
+      size: 2675039
     }
   }
 
@@ -119,21 +119,21 @@ describe('with dag-api', function () {
       }),
       foo: {
         path: 'foo',
-        multihash: 'QmQrb6KKWGo8w7zKfx2JksptY6wN7B2ysSBdKZr4xMU36d',
-        size: 320
+        multihash: 'bafybeiahadqxdlbf2w5l3bnyjmrso3zwlzeg6vcft7n6ogc3kgeg3eqcne',
+        size: 324
       },
       'foo/bar': {
         path: 'foo/bar',
-        multihash: 'Qmf5BQbTUyUAvd6Ewct83GYGnE1F6btiC3acLhR8MDxgkD',
-        size: 270
+        multihash: 'bafybeif2tllv3roheq754k4kbmlx3w6e36m3vntwe4apzufwd3aaqeqi5u',
+        size: 272
       },
       'foo-big/1.2MiB.txt': extend({}, baseFiles['1.2MiB.txt'], {
         path: 'foo-big/1.2MiB.txt'
       }),
       'foo-big': {
         path: 'foo-big',
-        multihash: 'Qma6JU3FoXU9eAzgomtmYPjzFBwVc2rRbECQpmHFiA98CJ',
-        size: 1328120
+        multihash: 'bafybeifmrcnmuli3vqni2gh5bzhq6dvn22kkpju6lak4xxjv7ut5m4qjxe',
+        size: 1330580
       },
       'pim/200Bytes.txt': extend({}, baseFiles['200Bytes.txt'], {
         path: 'pim/200Bytes.txt'
@@ -143,21 +143,21 @@ describe('with dag-api', function () {
       }),
       pim: {
         path: 'pim',
-        multihash: 'QmNk8VPGb3fkAQgoxctXo4Wmnr4PayFTASy4MiVXTtXqiA',
-        size: 1328386
+        multihash: 'bafybeih63r7unrizaqfpq6z337u3jh3m22ona552hpyqhdst3ign4ncnca',
+        size: 1330848
       },
       'empty-dir': {
         path: 'empty-dir',
-        multihash: 'QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn',
+        multihash: 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354',
         size: 4
       },
       'pam/pum': {
-        multihash: 'QmNk8VPGb3fkAQgoxctXo4Wmnr4PayFTASy4MiVXTtXqiA',
-        size: 1328386
+        multihash: 'bafybeih63r7unrizaqfpq6z337u3jh3m22ona552hpyqhdst3ign4ncnca',
+        size: 1330848
       },
       pam: {
         multihash: 'QmPAixYTaYnPe795fcWcuRpo6tfwHgRKNiBHpMzoomDVN6',
-        size: 2656553
+        size: 2661477
       }
     }, strategyOverrides[strategy])
 
@@ -173,7 +173,8 @@ describe('with dag-api', function () {
         maxChildrenPerNode: 10,
         chunkerOptions: {
           maxChunkSize: 1024
-        }
+        },
+        rawLeaves: false
       }
 
       before(function (done) {
@@ -224,7 +225,7 @@ describe('with dag-api', function () {
             expect(err).to.not.exist()
             expect(nodes.length).to.be.eql(1)
             // always yield empty node
-            expect(new CID(nodes[0].multihash).toBaseEncodedString()).to.be.eql('QmbFMke1KXqnYyBBWxB74N4c5SBnJMVAiMNRcGu6x1AwQH')
+            expect(new CID(nodes[0].multihash).toBaseEncodedString()).to.be.eql('bafybeif7ztnhq65lumvvtr4ekcwd2ifwgm3awq4zfr3srh462rwyinlb4y')
             done()
           }))
       })

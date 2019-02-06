@@ -15,7 +15,7 @@ const defaultOptions = {
   chunker: 'fixed',
   rawLeaves: false,
   hashOnly: false,
-  cidVersion: 0,
+  cidVersion: 1,
   hash: null,
   leafType: 'file',
   hashAlg: 'sha2-256'
@@ -23,9 +23,9 @@ const defaultOptions = {
 
 module.exports = function (ipld, _options) {
   const options = Object.assign({}, defaultOptions, _options)
-  options.cidVersion = options.cidVersion || 0
+  options.cidVersion = options.cidVersion || 1
 
-  if (options.cidVersion > 0 && _options.rawLeaves === undefined) {
+  if (options.cidVersion > 0 && (!_options || _options.rawLeaves === undefined)) {
     // if the cid version is 1 or above, use raw leaves as this is
     // what go does.
     options.rawLeaves = true

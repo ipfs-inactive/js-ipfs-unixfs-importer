@@ -16,7 +16,7 @@ const importer = require('../src')
 const exporter = require('ipfs-unixfs-exporter')
 
 describe('import and export: directory', () => {
-  const rootHash = 'QmdCrquDwd7RfZ6GCZFEVADwe8uyyw1YmF9mtAB7etDgmK'
+  const rootHash = 'bafybeig452tftu3cxeeynb76ihksupbmxt3uo2ypbqeyyg7ivy3ky7sqda'
   let ipld
 
   before((done) => {
@@ -44,19 +44,19 @@ describe('import and export: directory', () => {
         expect(err).to.not.exist()
         expect(files.map(normalizeNode).sort(byPath)).to.be.eql([
           { path: 'a/b/h',
-            multihash: 'QmWHMpCtdNjemT2F3SjyrmnBXQXwEohaZd4apcbFBhbFRC' },
+            multihash: 'bafkreihtuiwbz2hauwuwhe3qhadojlilmmbr6b4cygznq7orox6enkowhu' },
           { path: 'a/b/g',
-            multihash: 'QmQGwYzzTPcbqTiy2Nbp88gqqBqCWY4QZGfen45LFZkD5n' },
+            multihash: 'bafkreicmwczfbrrfbvji6ptb2b6zocesc2g3nc576hvfxzfikhw2ienn7m' },
           { path: 'a/b/c/d/f',
-            multihash: 'QmNVHs2dy7AjGUotsubWVncRsD3SpRXm8MgmCCQTVdVACz' },
+            multihash: 'bafkreic6on7yshnrc5kefi473zz6khlydjkfkbwxdskuo6tn5nmyrpl7ti' },
           { path: 'a/b/c/d/e',
-            multihash: 'QmYPbDKwc7oneCcEc6BcRSN5GXthTGWUCd19bTCyP9u3vH' },
+            multihash: 'bafkreifuspkigzfp4rgrdqawlt2hbjawjupcmcmrd34zrpugrvdk3y66jy' },
           { path: 'a/b/c/d',
-            multihash: 'QmQGDXr3ysARM38n7h79Tx7yD3YxuzcnZ1naG71WMojPoj' },
+            multihash: 'bafybeih327xgvrvrskzp2szg2h4mj2kppxubbb5go5dil2gdsqkdhctlga' },
           { path: 'a/b/c',
-            multihash: 'QmYTVcjYpN3hQLtJstCPE8hhEacAYjWAuTmmAAXoonamuE' },
+            multihash: 'bafybeihepdheh6iqyrmwlcsuy4wbxsbbjqvqycs6eps5wqnsmdboqq5ow4' },
           { path: 'a/b',
-            multihash: 'QmWyWYxq1GD9fEyckf5LrJv8hMW35CwfWwzDBp8bTw3NQj' },
+            multihash: 'bafybeieolgnh4uy6vp5wc5qij6ymhk3coh2mto4q57wmzzab3jfqfp66rq' },
           { path: 'a',
             multihash: rootHash }
         ])
@@ -87,13 +87,13 @@ describe('import and export: directory', () => {
           (err, files) => {
             expect(err).to.not.exist()
             expect(files.filter(fileHasContent).sort(byPath)).to.eql([
-              { path: 'QmdCrquDwd7RfZ6GCZFEVADwe8uyyw1YmF9mtAB7etDgmK/b/h',
+              { path: 'bafybeig452tftu3cxeeynb76ihksupbmxt3uo2ypbqeyyg7ivy3ky7sqda/b/h',
                 content: 'cream' },
-              { path: 'QmdCrquDwd7RfZ6GCZFEVADwe8uyyw1YmF9mtAB7etDgmK/b/g',
+              { path: 'bafybeig452tftu3cxeeynb76ihksupbmxt3uo2ypbqeyyg7ivy3ky7sqda/b/g',
                 content: 'ice' },
-              { path: 'QmdCrquDwd7RfZ6GCZFEVADwe8uyyw1YmF9mtAB7etDgmK/b/c/d/f',
+              { path: 'bafybeig452tftu3cxeeynb76ihksupbmxt3uo2ypbqeyyg7ivy3ky7sqda/b/c/d/f',
                 content: 'strawberry' },
-              { path: 'QmdCrquDwd7RfZ6GCZFEVADwe8uyyw1YmF9mtAB7etDgmK/b/c/d/e',
+              { path: 'bafybeig452tftu3cxeeynb76ihksupbmxt3uo2ypbqeyyg7ivy3ky7sqda/b/c/d/e',
                 content: 'banana' }
             ])
             done()

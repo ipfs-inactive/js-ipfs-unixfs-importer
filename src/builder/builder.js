@@ -24,7 +24,7 @@ const defaultOptions = {
   rawLeaves: false,
   hashAlg: 'sha2-256',
   leafType: 'file',
-  cidVersion: 0,
+  cidVersion: 1,
   progress: () => {}
 }
 

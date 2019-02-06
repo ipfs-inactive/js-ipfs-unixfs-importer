@@ -7,7 +7,7 @@ const {
 } = require('ipld-dag-pb')
 
 const defaultOptions = {
-  cidVersion: 0,
+  cidVersion: 1,
   hashAlg: 'sha2-256',
   codec: 'dag-pb'
 }

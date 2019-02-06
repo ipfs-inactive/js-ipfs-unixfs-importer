@@ -21,9 +21,9 @@ const strategies = [
 ]
 
 const expectedHashes = {
-  flat: 'QmRgXEDv6DL8uchf7h9j8hAGG8Fq5r1UZ6Jy3TQAPxEb76',
-  balanced: 'QmVY1TFpjYKSo8LRG9oYgH4iy9AduwDvBGNhqap1Gkxme3',
-  trickle: 'QmYPsm9oVGjWECkT7KikZmrf8imggqKe8uS8Jco3qfWUCH'
+  flat: 'bafybeid7e25emp6ruqhuyrse2iwxd722gvb42hr6lycievs2sllafgk4fa',
+  balanced: 'bafybeiehl4ol4wqhzzxouk4lqwjykqulpg4qvg4g24gntqbsqrqfs6rocu',
+  trickle: 'bafybeihc3tgk6xojwmz7zl5kuzrigwcgnkxqd6dniiemohf4zemqnsqte4'
 }
 
 strategies.forEach(strategy => {
