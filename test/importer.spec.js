@@ -618,6 +618,22 @@ strategies.forEach((strategy) => {
       )
     })
 
+    it('will import files with CID version 0', (done) => {
+      pull(
+        values([{
+          path: `TEST${Date.now()}.txt`,
+          content: values([Buffer.from('TEST' + Date.now())])
+        }]),
+        importer(ipld, { ...options, cidVersion: 0 }),
+        collect((err, results) => {
+          expect(err).to.not.exist()
+          console.log(new CID(results[0].multihash).toString())
+          expect(new CID(results[0].multihash).version).to.equal(0)
+          done()
+        })
+      )
+    })
+
     it('will import files with CID version 1', (done) => {
       const createInputFile = (path, size) => {
         const name = String(Math.random() + Date.now())

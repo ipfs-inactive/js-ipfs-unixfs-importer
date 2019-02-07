@@ -13,7 +13,7 @@ const defaultOptions = {
 }
 
 const persist = (node, ipld, options, callback) => {
-  let cidVersion = options.cidVersion || defaultOptions.cidVersion
+  let cidVersion = options.cidVersion == null ? defaultOptions.cidVersion : options.cidVersion
   let hashAlg = options.hashAlg || defaultOptions.hashAlg
   let codec = options.codec || defaultOptions.codec
 
