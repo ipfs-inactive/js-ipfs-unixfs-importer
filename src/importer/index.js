@@ -32,7 +32,7 @@ module.exports = function (ipld, _options) {
     options.rawLeaves = true
   }
 
-  if (_options && _options.hash !== undefined && _options.rawLeaves === undefined) {
+  if (_options.hash !== undefined && _options.rawLeaves === undefined) {
     // if a non-default hash alg has been specified, use raw leaves as this is
     // what go does.
     options.rawLeaves = true
