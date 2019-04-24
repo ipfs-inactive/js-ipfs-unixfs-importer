@@ -52,6 +52,10 @@ class DirSharded extends Dir {
   }
 
   async put (name, value, callback) {
+    if (!callback) {
+      console.info('wut')
+    }
+
     try {
       await this._bucket.put(name, value)
 
@@ -100,7 +104,7 @@ class DirSharded extends Dir {
       if (err) {
         return callback(err)
       } else {
-        this.multihash = results.cid.buffer
+        this.cid = results.cid
         this.size = results.node.size
       }
 
@@ -157,7 +161,7 @@ function flush (options, bucket, path, ipld, source, callback) {
     } else {
       const value = child.value
       const label = labelPrefix + child.key
-      links.push(new DAGLink(label, value.size, value.multihash))
+      links.push(new DAGLink(label, value.size, value.cid))
       callback()
     }
   }
@@ -176,7 +180,7 @@ function flush (options, bucket, path, ipld, source, callback) {
         const pushable = {
           path: path,
           size: node.size,
-          multihash: cid.buffer
+          cid: cid
         }
         if (source) {
           source.push(pushable)

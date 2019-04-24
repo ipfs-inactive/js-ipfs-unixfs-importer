@@ -1,5 +1,8 @@
 'use strict'
 
+const mh = require('multihashes')
+const mc = require('multicodec')
+
 const {
   util: {
     cid
@@ -22,8 +25,12 @@ const persist = (node, ipld, options, callback) => {
     codec = 'raw'
   }
 
-  if (hashAlg !== 'sha2-256') {
+  if (hashAlg !== 'sha2-256' && hashAlg !== mh.names['sha2-256']) {
     cidVersion = 1
+  }
+
+  if (isNaN(hashAlg)) {
+    hashAlg = mh.names[hashAlg]
   }
 
   if (options.onlyHash) {
@@ -38,16 +45,14 @@ const persist = (node, ipld, options, callback) => {
     })
   }
 
-  ipld.put(node, {
-    version: cidVersion,
-    hashAlg: hashAlg,
-    format: codec
-  }, (error, cid) => {
-    callback(error, {
+  ipld.put(node, mc[codec.toUpperCase().replace(/-/g, '_')], {
+    cidVersion: cidVersion,
+    hashAlg: hashAlg
+  })
+    .then((cid) => callback(null, {
       cid,
       node
-    })
-  })
+    }), callback)
 }
 
 module.exports = persist

@@ -15,6 +15,7 @@ const reduce = require('./reduce')
 const {
   DAGNode
 } = require('ipld-dag-pb')
+const errCode = require('err-code')
 
 const defaultOptions = {
   chunkerOptions: {
@@ -78,7 +79,7 @@ module.exports = function builder (createChunker, ipld, createReducer, _options)
 
       callback(null, {
         path: item.path,
-        multihash: result.cid.buffer,
+        cid: result.cid,
         size: result.node.size
       })
     })
@@ -90,7 +91,7 @@ module.exports = function builder (createChunker, ipld, createReducer, _options)
     }
 
     if (typeof file.content !== 'function') {
-      return callback(new Error('invalid content'))
+      return callback(errCode(new Error('invalid content'), 'EINVALIDCONTENT'))
     }
 
     const reducer = createReducer(reduce(file, ipld, options), options)
@@ -146,7 +147,7 @@ module.exports = function builder (createChunker, ipld, createReducer, _options)
                 size: leaf.size,
                 leafSize: leaf.leafSize,
                 data: results.node,
-                multihash: results.cid.buffer,
+                cid: results.cid,
                 path: leaf.path,
                 name: ''
               })

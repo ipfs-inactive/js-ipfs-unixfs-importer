@@ -14,7 +14,7 @@ const map = require('pull-stream/throughs/map')
 const collect = require('pull-stream/sinks/collect')
 const pushable = require('pull-pushable')
 
-describe('importer: flush', () => {
+describe.skip('importer: flush', () => {
   let ipld
 
   before((done) => {

@@ -16,7 +16,7 @@ class DirFlat extends Dir {
   }
 
   put (name, value, callback) {
-    this.multihash = undefined
+    this.cid = undefined
     this.size = undefined
     this._children[name] = value
     process.nextTick(callback)
@@ -52,7 +52,7 @@ class DirFlat extends Dir {
     const links = Object.keys(this._children)
       .map((key) => {
         const child = this._children[key]
-        return new DAGLink(key, child.size, child.multihash)
+        return new DAGLink(key, child.size, child.cid)
       })
 
     const dir = new UnixFS('directory')
@@ -62,12 +62,12 @@ class DirFlat extends Dir {
         (callback) => DAGNode.create(dir.marshal(), links, callback),
         (node, callback) => persist(node, ipld, this._options, callback),
         ({ cid, node }, callback) => {
-          this.multihash = cid.buffer
+          this.cid = cid
           this.size = node.size
           const pushable = {
             path: path,
-            multihash: cid.buffer,
-            size: node.size
+            size: node.size,
+            cid: cid
           }
           source.push(pushable)
           callback(null, node)

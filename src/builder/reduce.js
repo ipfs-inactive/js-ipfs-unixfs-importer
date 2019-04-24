@@ -16,7 +16,7 @@ module.exports = function reduce (file, ipld, options) {
       return callback(null, {
         size: leaf.size,
         leafSize: leaf.leafSize,
-        multihash: leaf.multihash,
+        cid: leaf.cid,
         path: file.path,
         name: leaf.name
       })
@@ -28,7 +28,7 @@ module.exports = function reduce (file, ipld, options) {
     const links = leaves.map((leaf) => {
       f.addBlockSize(leaf.leafSize)
 
-      return new DAGLink(leaf.name, leaf.size, leaf.multihash)
+      return new DAGLink(leaf.name, leaf.size, leaf.cid)
     })
 
     waterfall([
@@ -42,7 +42,7 @@ module.exports = function reduce (file, ipld, options) {
       callback(null, {
         size: result.node.size,
         leafSize: f.fileSize(),
-        multihash: result.cid.buffer,
+        cid: result.cid,
         path: file.path,
         name: ''
       })

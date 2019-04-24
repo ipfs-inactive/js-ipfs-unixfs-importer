@@ -108,6 +108,7 @@ module.exports = function (ipld, _options) {
           callback(err)
           return
         }
+
         pausable.resume()
         callback(null, hash)
       })

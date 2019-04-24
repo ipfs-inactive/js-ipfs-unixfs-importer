@@ -6,12 +6,21 @@ chai.use(require('dirty-chai'))
 const expect = chai.expect
 const pull = require('pull-stream/pull')
 const values = require('pull-stream/sources/values')
-const collect = require('pull-stream/sinks/collect')
 const IPLD = require('ipld')
 const inMemory = require('ipld-in-memory')
-const CID = require('cids')
 const createBuilder = require('../src/builder')
 const FixedSizeChunker = require('../src/chunker/fixed-size')
+const toIterator = require('pull-stream-to-async-iterator')
+const all = require('async-iterator-all')
+
+const builder = (source, ipld, options) => {
+  return toIterator(
+    pull(
+      values(source),
+      createBuilder(FixedSizeChunker, ipld, options)
+    )
+  )
+}
 
 describe('builder: onlyHash', () => {
   let ipld
@@ -26,33 +35,22 @@ describe('builder: onlyHash', () => {
     })
   })
 
-  it('will only chunk and hash if passed an "onlyHash" option', (done) => {
-    const onCollected = (err, nodes) => {
-      if (err) return done(err)
-
-      const node = nodes[0]
-      expect(node).to.exist()
-
-      ipld.get(new CID(node.multihash), (err, res) => {
-        expect(err).to.exist()
-        done()
-      })
-    }
-
-    const content = String(Math.random() + Date.now())
-    const inputFile = {
-      path: content + '.txt',
-      content: Buffer.from(content)
-    }
-
-    const options = {
+  it('will only chunk and hash if passed an "onlyHash" option', async () => {
+    const nodes = await all(builder({
+      path: '/foo.txt',
+      content: Buffer.from([0, 1, 2, 3, 4])
+    }, ipld, {
       onlyHash: true
-    }
+    }))
 
-    pull(
-      values([inputFile]),
-      createBuilder(FixedSizeChunker, ipld, options),
-      collect(onCollected)
-    )
+    expect(nodes.length).to.equal(2)
+
+    try {
+      await ipld.get(nodes[0].cid)
+
+      throw new Error('Should have errored')
+    } catch (err) {
+      expect(err.code).to.equal('ERR_NOT_FOUND')
+    }
   })
 })

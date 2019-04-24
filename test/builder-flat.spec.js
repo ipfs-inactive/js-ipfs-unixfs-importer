@@ -6,9 +6,18 @@ chai.use(require('dirty-chai'))
 const expect = chai.expect
 const pull = require('pull-stream/pull')
 const values = require('pull-stream/sources/values')
-const collect = require('pull-stream/sinks/collect')
+const toIterator = require('pull-stream-to-async-iterator')
+const pullBuilder = require('../src/builder/flat')
+const all = require('async-iterator-all')
 
-const builder = require('../src/builder/flat')
+const builder = (source, reduce, options) => {
+  return toIterator(
+    pull(
+      values(source),
+      pullBuilder(reduce, options)
+    )
+  )
+}
 
 function reduce (leaves, callback) {
   if (leaves.length > 1) {
@@ -19,27 +28,17 @@ function reduce (leaves, callback) {
 }
 
 describe('builder: flat', () => {
-  it('reduces one value into itself', (callback) => {
-    pull(
-      values([1]),
-      builder(reduce),
-      collect((err, result) => {
-        expect(err).to.not.exist()
-        expect(result).to.be.eql([1])
-        callback()
-      })
-    )
+  it('reduces one value into itself', async () => {
+    const source = [1]
+    const result = await all(builder(source, reduce))
+
+    expect(result).to.be.eql([1])
   })
 
-  it('reduces 2 values into parent', (callback) => {
-    pull(
-      values([1, 2]),
-      builder(reduce),
-      collect((err, result) => {
-        expect(err).to.not.exist()
-        expect(result).to.eql([{ children: [1, 2] }])
-        callback()
-      })
-    )
+  it('reduces 2 values into parent', async () => {
+    const source = [1, 2]
+    const result = await all(builder(source, reduce))
+
+    expect(result).to.be.eql([{ children: [1, 2] }])
   })
 })

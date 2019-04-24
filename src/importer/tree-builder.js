@@ -10,6 +10,7 @@ const DirFlat = require('./dir-flat')
 const flatToShard = require('./flat-to-shard')
 const Dir = require('./dir')
 const toPathComponents = require('../utils/to-path-components')
+const errCode = require('err-code')
 
 module.exports = createTreeBuilder
 
@@ -104,7 +105,7 @@ function createTreeBuilder (ipld, _options) {
       currentPath += pathElem
       const last = (index === lastIndex)
       parent.dirty = true
-      parent.multihash = null
+      parent.cid = null
       parent.size = null
 
       if (last) {
@@ -151,7 +152,7 @@ function createTreeBuilder (ipld, _options) {
         if (err) {
           callback(err)
         } else {
-          callback(null, node && node.multihash)
+          callback(null, node && node.cid)
         }
       }
     })
@@ -160,7 +161,7 @@ function createTreeBuilder (ipld, _options) {
   function flush (path, tree, callback) {
     if (tree.dir) {
       if (tree.root && tree.childCount() > 1 && !options.wrap) {
-        callback(new Error('detected more than one root'))
+        callback(errCode(new Error('detected more than one root'), 'EMORETHANONEROOT'))
         return // early
       }
       tree.eachChildSeries(
@@ -196,7 +197,7 @@ function createTreeBuilder (ipld, _options) {
     }
 
     if (!tree.dirty) {
-      callback(null, tree.multihash)
+      callback(null, tree.cid)
       return // early
     }
 
