@@ -75,22 +75,22 @@ When run, metadata about DAGNodes in the created tree is printed until the root:
 ```js
 {
   cid: CID, // see https://github.com/multiformats/js-cid
-  path: '/tmp/foo/bar',
+  path: 'tmp/foo/bar',
   unixfs: UnixFS // see https://github.com/ipfs/js-ipfs-unixfs
 }
 {
   cid: CID, // see https://github.com/multiformats/js-cid
-  path: '/tmp/foo/quxx',
+  path: 'tmp/foo/quxx',
   unixfs: UnixFS // see https://github.com/ipfs/js-ipfs-unixfs
 }
 {
   cid: CID, // see https://github.com/multiformats/js-cid
-  path: '/tmp/foo',
+  path: 'tmp/foo',
   unixfs: UnixFS // see https://github.com/ipfs/js-ipfs-unixfs
 }
 {
   cid: CID, // see https://github.com/multiformats/js-cid
-  path: '/tmp',
+  path: 'tmp',
   unixfs: UnixFS // see https://github.com/ipfs/js-ipfs-unixfs
 }
 ```
