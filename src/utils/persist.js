@@ -3,56 +3,23 @@
 const mh = require('multihashes')
 const mc = require('multicodec')
 
-const {
-  util: {
-    cid
-  }
-} = require('ipld-dag-pb')
-
-const defaultOptions = {
-  cidVersion: 0,
-  hashAlg: 'sha2-256',
-  codec: 'dag-pb'
-}
-
-const persist = (node, ipld, options, callback) => {
-  let cidVersion = options.cidVersion || defaultOptions.cidVersion
-  let hashAlg = options.hashAlg || defaultOptions.hashAlg
-  let codec = options.codec || defaultOptions.codec
-
-  if (Buffer.isBuffer(node)) {
-    cidVersion = 1
-    codec = 'raw'
+const persist = async (node, ipld, options) => {
+  if (!options.codec && node.length) {
+    options.cidVersion = 1
+    options.codec = 'raw'
   }
 
-  if (hashAlg !== 'sha2-256' && hashAlg !== mh.names['sha2-256']) {
-    cidVersion = 1
+  if (isNaN(options.hashAlg)) {
+    options.hashAlg = mh.names[options.hashAlg]
   }
 
-  if (isNaN(hashAlg)) {
-    hashAlg = mh.names[hashAlg]
+  if (options.hashAlg !== mh.names['sha2-256']) {
+    options.cidVersion = 1
   }
 
-  if (options.onlyHash) {
-    return cid(node, {
-      version: cidVersion,
-      hashAlg: hashAlg
-    }, (err, cid) => {
-      callback(err, {
-        cid,
-        node
-      })
-    })
-  }
+  const format = mc[options.codec.toUpperCase().replace(/-/g, '_')]
 
-  ipld.put(node, mc[codec.toUpperCase().replace(/-/g, '_')], {
-    cidVersion: cidVersion,
-    hashAlg: hashAlg
-  })
-    .then((cid) => callback(null, {
-      cid,
-      node
-    }), callback)
+  return ipld.put(node, format, options)
 }
 
 module.exports = persist

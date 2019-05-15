@@ -4,7 +4,7 @@ module.exports = function (cid, ipld) {
   async function * traverse (cid) {
     const node = await ipld.get(cid)
 
-    if (Buffer.isBuffer(node) || !node.links.length) {
+    if (Buffer.isBuffer(node) || !node.Links.length) {
       yield {
         node,
         cid
@@ -13,7 +13,7 @@ module.exports = function (cid, ipld) {
       return
     }
 
-    node.links.forEach(link => traverse(link.cid))
+    node.Links.forEach(link => traverse(link.Hash))
   }
 
   return traverse(cid)

@@ -8,7 +8,8 @@ const expect = chai.expect
 const IPLD = require('ipld')
 const inMemory = require('ipld-in-memory')
 const loadFixture = require('aegir/fixtures')
-const bigFile = loadFixture('test/fixtures/1.2MiB.txt')
+const isNode = require('detect-node')
+const bigFile = loadFixture((isNode ? __dirname : 'test') + '/fixtures/1.2MiB.txt')
 
 const importer = require('../src')
 const exporter = require('ipfs-unixfs-exporter')
@@ -39,7 +40,7 @@ describe('import and export', function () {
       })
 
       it('imports and exports', async () => {
-        const path = strategy + '-big.dat'
+        const path = `${strategy}-big.dat`
         const values = [{ path: path, content: bigFile }]
 
         for await (const file of importer(values, ipld, importerOptions)) {

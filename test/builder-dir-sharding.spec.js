@@ -11,6 +11,7 @@ const IPLD = require('ipld')
 const inMemory = require('ipld-in-memory')
 const leftPad = require('left-pad')
 const all = require('async-iterator-all')
+const last = require('async-iterator-last')
 
 describe('builder: directory sharding', () => {
   let ipld
@@ -27,20 +28,25 @@ describe('builder: directory sharding', () => {
 
   describe('basic dirbuilder', () => {
     it('yields a non-sharded dir', async () => {
+      const content = Buffer.from('i have the best bytes')
       const nodes = await all(importer([{
         path: 'a/b',
-        content: Buffer.from('i have the best bytes')
+        content
       }], ipld, {
         shardSplitThreshold: Infinity // never shard
       }))
 
       expect(nodes.length).to.equal(2)
+
       expect(nodes[0].path).to.equal('a/b')
       expect(nodes[1].path).to.equal('a')
 
-      const node = await exporter(nodes[1].cid, ipld)
+      const dirNode = await exporter(nodes[1].cid, ipld)
+      expect(dirNode.unixfs.type).to.equal('directory')
 
-      expect(node.unixfs.type).to.equal('directory')
+      const fileNode = await exporter(nodes[0].cid, ipld)
+      expect(fileNode.unixfs.type).to.equal('file')
+      expect(Buffer.concat(await all(fileNode.content()))).to.deep.equal(content)
     })
 
     it('yields a sharded dir', async () => {
@@ -184,6 +190,7 @@ describe('builder: directory sharding', () => {
           while (pendingDepth && pending) {
             i++
             const dir = []
+
             for (let d = 0; d < depth; d++) {
               dir.push('big')
             }
@@ -204,11 +211,10 @@ describe('builder: directory sharding', () => {
         }
       }
 
-      const nodes = await all(importer(source, ipld))
-      const last = nodes[nodes.length - 1]
-      expect(last.path).to.equal('big')
+      const node = await last(importer(source, ipld))
+      expect(node.path).to.equal('big')
 
-      rootHash = last.cid
+      rootHash = node.cid
     })
 
     it('imports a big dir', async () => {

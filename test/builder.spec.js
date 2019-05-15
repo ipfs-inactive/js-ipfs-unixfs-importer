@@ -4,25 +4,12 @@
 const chai = require('chai')
 chai.use(require('dirty-chai'))
 const expect = chai.expect
-const pull = require('pull-stream/pull')
-const values = require('pull-stream/sources/values')
 const mh = require('multihashes')
 const IPLD = require('ipld')
 const inMemory = require('ipld-in-memory')
 const UnixFS = require('ipfs-unixfs')
-const createBuilder = require('../src/builder')
-const FixedSizeChunker = require('../src/chunker/fixed-size')
-const toIterator = require('pull-stream-to-async-iterator')
+const builder = require('../src/dag-builder')
 const first = require('async-iterator-first')
-
-const builder = (source, ipld, options) => {
-  return toIterator(
-    pull(
-      values(source),
-      createBuilder(FixedSizeChunker, ipld, options)
-    )
-  )
-}
 
 describe('builder', () => {
   let ipld
@@ -38,18 +25,31 @@ describe('builder', () => {
   })
 
   const testMultihashes = Object.keys(mh.names).slice(1, 40)
+  const opts = {
+    strategy: 'flat',
+    chunker: 'fixed',
+    leafType: 'file',
+    reduceSingleLeafToSelf: true,
+    progress: () => {},
+    chunkerOptions: {
+      maxChunkSize: 262144
+    }
+  }
 
   it('allows multihash hash algorithm to be specified', async () => {
     for (let i = 0; i < testMultihashes.length; i++) {
       const hashAlg = testMultihashes[i]
-      const options = { hashAlg, strategy: 'flat' }
+      const options = {
+        ...opts,
+        hashAlg
+      }
       const content = String(Math.random() + Date.now())
       const inputFile = {
         path: content + '.txt',
         content: Buffer.from(content)
       }
 
-      const imported = await first(builder([Object.assign({}, inputFile)], ipld, options))
+      const imported = await first(builder([inputFile], ipld, options))
 
       expect(imported).to.exist()
 
@@ -59,8 +59,8 @@ describe('builder', () => {
       // Fetch using hashAlg encoded multihash
       const node = await ipld.get(imported.cid)
 
-      const fetchedContent = UnixFS.unmarshal(node.data).data
-      expect(fetchedContent.equals(inputFile.content)).to.be.true()
+      const fetchedContent = UnixFS.unmarshal(node.Data).data
+      expect(fetchedContent).to.deep.equal(inputFile.content)
     }
   })
 
@@ -69,7 +69,10 @@ describe('builder', () => {
 
     for (let i = 0; i < testMultihashes.length; i++) {
       const hashAlg = testMultihashes[i]
-      const options = { hashAlg, strategy: 'flat' }
+      const options = {
+        ...opts,
+        hashAlg
+      }
       const content = String(Math.random() + Date.now())
       const inputFile = {
         path: content + '.txt',
@@ -88,7 +91,10 @@ describe('builder', () => {
     for (let i = 0; i < testMultihashes.length; i++) {
       const hashAlg = testMultihashes[i]
 
-      const options = { hashAlg, strategy: 'flat' }
+      const options = {
+        ...opts,
+        hashAlg
+      }
       const inputFile = {
         path: `${String(Math.random() + Date.now())}-dir`,
         content: null
@@ -101,7 +107,7 @@ describe('builder', () => {
       // Fetch using hashAlg encoded multihash
       const node = await ipld.get(imported.cid)
 
-      const meta = UnixFS.unmarshal(node.data)
+      const meta = UnixFS.unmarshal(node.Data)
       expect(meta.type).to.equal('directory')
     }
   })

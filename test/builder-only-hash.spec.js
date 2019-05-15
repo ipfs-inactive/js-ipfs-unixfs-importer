@@ -4,23 +4,10 @@
 const chai = require('chai')
 chai.use(require('dirty-chai'))
 const expect = chai.expect
-const pull = require('pull-stream/pull')
-const values = require('pull-stream/sources/values')
 const IPLD = require('ipld')
 const inMemory = require('ipld-in-memory')
-const createBuilder = require('../src/builder')
-const FixedSizeChunker = require('../src/chunker/fixed-size')
-const toIterator = require('pull-stream-to-async-iterator')
+const builder = require('../src/dag-builder')
 const all = require('async-iterator-all')
-
-const builder = (source, ipld, options) => {
-  return toIterator(
-    pull(
-      values(source),
-      createBuilder(FixedSizeChunker, ipld, options)
-    )
-  )
-}
 
 describe('builder: onlyHash', () => {
   let ipld
@@ -36,14 +23,26 @@ describe('builder: onlyHash', () => {
   })
 
   it('will only chunk and hash if passed an "onlyHash" option', async () => {
-    const nodes = await all(builder({
-      path: '/foo.txt',
+    const nodes = await all(builder([{
+      path: 'foo.txt',
       content: Buffer.from([0, 1, 2, 3, 4])
-    }, ipld, {
-      onlyHash: true
+    }], ipld, {
+      onlyHash: true,
+      chunker: 'fixed',
+      strategy: 'balanced',
+      progress: () => {},
+      leafType: 'file',
+      reduceSingleLeafToSelf: true,
+      wrap: true,
+      chunkerOptions: {
+        maxChunkSize: 1024
+      },
+      builderOptions: {
+        maxChildrenPerNode: 254
+      }
     }))
 
-    expect(nodes.length).to.equal(2)
+    expect(nodes.length).to.equal(1)
 
     try {
       await ipld.get(nodes[0].cid)

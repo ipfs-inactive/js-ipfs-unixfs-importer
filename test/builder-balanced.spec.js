@@ -4,26 +4,14 @@
 const chai = require('chai')
 chai.use(require('dirty-chai'))
 const expect = chai.expect
-const pull = require('pull-stream/pull')
-const values = require('pull-stream/sources/values')
-const toIterator = require('pull-stream-to-async-iterator')
-const pullBuilder = require('../src/builder/balanced')
+const builder = require('../src/dag-builder/file/balanced')
 const all = require('async-iterator-all')
 
-const builder = (source, reduce, options) => {
-  return toIterator(
-    pull(
-      values(source),
-      pullBuilder(reduce, options)
-    )
-  )
-}
-
-function reduce (leaves, callback) {
+function reduce (leaves) {
   if (leaves.length > 1) {
-    callback(null, { children: leaves })
+    return { children: leaves }
   } else {
-    callback(null, leaves[0])
+    return leaves[0]
   }
 }
 

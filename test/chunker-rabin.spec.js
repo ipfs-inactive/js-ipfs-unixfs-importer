@@ -1,28 +1,16 @@
 /* eslint-env mocha */
 'use strict'
 
-const createChunker = require('../src/chunker/rabin')
+const chunker = require('../src/chunker/rabin')
 const chai = require('chai')
 chai.use(require('dirty-chai'))
 const expect = chai.expect
-const pull = require('pull-stream/pull')
-const values = require('pull-stream/sources/values')
 const loadFixture = require('aegir/fixtures')
 const os = require('os')
 const isNode = require('detect-node')
-const toIterator = require('pull-stream-to-async-iterator')
 const all = require('async-iterator-all')
 
-const rawFile = loadFixture('test/fixtures/1MiB.txt')
-
-const chunker = (source, options) => {
-  return toIterator(
-    pull(
-      values(source),
-      createChunker(options)
-    )
-  )
-}
+const rawFile = loadFixture((isNode ? __dirname : 'test') + '/fixtures/1MiB.txt')
 
 describe('chunker: rabin', function () {
   this.timeout(30000)
@@ -49,7 +37,9 @@ describe('chunker: rabin', function () {
     const chunks = await all(chunker([b1, b2, b3], {
       minChunkSize: 48,
       avgChunkSize: 96,
-      maxChunkSize: 192
+      maxChunkSize: 192,
+      window: 16,
+      polynomial: '0x3DF305DFB2A805'
     }))
 
     chunks.forEach((chunk) => {
@@ -63,7 +53,11 @@ describe('chunker: rabin', function () {
     b1.fill('a')
 
     const chunks = await all(chunker([b1], {
-      avgChunkSize: 256
+      maxChunkSize: 262144,
+      minChunkSize: 1,
+      avgChunkSize: 256,
+      window: 16,
+      polynomial: '0x3DF305DFB2A805'
     }))
 
     chunks.forEach((chunk) => {
@@ -78,7 +72,9 @@ describe('chunker: rabin', function () {
     const opts = {
       minChunkSize: KiB256 / 3,
       avgChunkSize: KiB256,
-      maxChunkSize: KiB256 + (KiB256 / 2)
+      maxChunkSize: KiB256 + (KiB256 / 2),
+      window: 16,
+      polynomial: '0x3DF305DFB2A805'
     }
 
     const chunks = await all(chunker([file], opts))
