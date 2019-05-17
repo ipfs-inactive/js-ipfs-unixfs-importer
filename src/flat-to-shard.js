@@ -29,7 +29,7 @@ module.exports = async function flatToShard (child, dir, threshold, options) {
 }
 
 async function convertToShard (oldDir, options) {
-  const newDir = DirSharded({
+  const newDir = new DirSharded({
     root: oldDir.root,
     dir: true,
     parent: oldDir.parent,

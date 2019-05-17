@@ -6,7 +6,7 @@ const errCode = require('err-code')
 async function * validateChunks (source) {
   for await (const content of source) {
     if (content.length === undefined) {
-      throw errCode(new Error('Content was invalid'), 'EINVALIDCONTENT')
+      throw errCode(new Error('Content was invalid'), 'ERR_INVALID_CONTENT')
     }
 
     if (typeof content === 'string' || content instanceof String) {

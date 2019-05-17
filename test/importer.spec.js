@@ -267,7 +267,7 @@ strategies.forEach((strategy) => {
         }], ipld, options))
         throw new Error('No error was thrown')
       } catch (err) {
-        expect(err.code).to.equal('EINVALIDCONTENT')
+        expect(err.code).to.equal('ERR_INVALID_CONTENT')
       }
     })
 
@@ -283,7 +283,7 @@ strategies.forEach((strategy) => {
         }], ipld, options))
         throw new Error('No error was thrown')
       } catch (err) {
-        expect(err.code).to.equal('EINVALIDCONTENT')
+        expect(err.code).to.equal('ERR_INVALID_CONTENT')
       }
     })
 
@@ -317,7 +317,7 @@ strategies.forEach((strategy) => {
 
         throw new Error('No error was thrown')
       } catch (err) {
-        expect(err.code).to.equal('EMORETHANONEROOT')
+        expect(err.code).to.equal('ERR_MORE_THAN_ONE_ROOT')
       }
     })
 

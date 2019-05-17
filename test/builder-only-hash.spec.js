@@ -33,6 +33,8 @@ describe('builder: onlyHash', () => {
       progress: () => {},
       leafType: 'file',
       reduceSingleLeafToSelf: true,
+      format: 'dag-pb',
+      hashAlg: 'sha2-256',
       wrap: true,
       chunkerOptions: {
         maxChunkSize: 1024

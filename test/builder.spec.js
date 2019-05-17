@@ -30,6 +30,8 @@ describe('builder', () => {
     chunker: 'fixed',
     leafType: 'file',
     reduceSingleLeafToSelf: true,
+    format: 'dag-pb',
+    hashAlg: 'sha2-256',
     progress: () => {},
     chunkerOptions: {
       maxChunkSize: 262144

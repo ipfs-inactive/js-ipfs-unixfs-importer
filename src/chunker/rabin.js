@@ -10,10 +10,10 @@ module.exports = async function * rabinChunker (source, options) {
       createRabin = require('rabin')
 
       if (typeof createRabin !== 'function') {
-        throw errCode(new Error(`createRabin was not a function`), 'EUNSUPPORTED')
+        throw errCode(new Error(`createRabin was not a function`), 'ERR_UNSUPPORTED')
       }
     } catch (err) {
-      throw errCode(new Error(`Rabin chunker not available, it may have failed to install or not be supported on this platform`), 'EUNSUPPORTED')
+      throw errCode(new Error(`Rabin chunker not available, it may have failed to install or not be supported on this platform`), 'ERR_UNSUPPORTED')
     }
   }
 

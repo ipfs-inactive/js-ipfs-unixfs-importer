@@ -80,9 +80,7 @@ class DirSharded extends Dir {
   }
 }
 
-module.exports = (props, options) => {
-  return new DirSharded(props, options)
-}
+module.exports = DirSharded
 
 module.exports.hashFn = hashFn
 
@@ -123,7 +121,11 @@ async function * flush (path, bucket, ipld, options) {
       const value = child.value
 
       if (!value.node) {
-        continue
+        if (value.cid) {
+          value.node = await ipld.get(value.cid)
+        } else {
+          continue
+        }
       }
 
       const label = labelPrefix + child.key

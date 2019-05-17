@@ -67,7 +67,7 @@ async function * treeBuilder (source, ipld, options) {
   if (tree) {
     if (!options.wrapWithDirectory) {
       if (tree.childCount() > 1) {
-        throw errCode(new Error('detected more than one root'), 'EMORETHANONEROOT')
+        throw errCode(new Error('detected more than one root'), 'ERR_MORE_THAN_ONE_ROOT')
       }
 
       const unwrapped = await first(tree.eachChildSeries())

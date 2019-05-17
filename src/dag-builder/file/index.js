@@ -119,7 +119,7 @@ const fileBuilder = async (file, source, ipld, options) => {
   const dagBuilder = dagBuilders[options.strategy]
 
   if (!dagBuilder) {
-    throw errCode(new Error(`Unknown importer build strategy name: ${options.strategy}`), 'EBADSTRATEGY')
+    throw errCode(new Error(`Unknown importer build strategy name: ${options.strategy}`), 'ERR_BAD_STRATEGY')
   }
 
   const roots = await all(dagBuilder(buildFile(source, ipld, options), reduce(file, ipld, options), options.builderOptions))

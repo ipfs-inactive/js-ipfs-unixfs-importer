@@ -11,7 +11,7 @@ module.exports = (type, source, options) => {
   const chunker = chunkers[type]
 
   if (!chunker) {
-    throw errCode(new Error(`Unknkown chunker named ${type}`), 'EUNKNOWNCHUNKER')
+    throw errCode(new Error(`Unknkown chunker named ${type}`), 'ERR_UNKNOWN_CHUNKER')
   }
 
   return chunker(source, options)

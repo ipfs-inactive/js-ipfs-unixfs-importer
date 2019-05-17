@@ -41,6 +41,7 @@ const Options = struct({
   strategy: struct.enum(['balanced', 'flat', 'trickle']),
   reduceSingleLeafToSelf: 'boolean?',
   codec: 'codec?',
+  format: 'codec?',
   hashAlg: 'hashAlg?',
   leafType: 'leafType?',
   cidVersion: 'number?',
@@ -88,6 +89,10 @@ module.exports = async function * (source, ipld, options = {}) {
   // go-ifps trickle dag defaults to unixfs raw leaves, balanced dag defaults to file leaves
   if (options.strategy === 'trickle' && !options.leafType) {
     opts.leafType = 'raw'
+  }
+
+  if (options.format) {
+    options.codec = options.format
   }
 
   for await (const entry of treeBuilder(dagBuilder(source, ipld, opts), ipld, opts)) {

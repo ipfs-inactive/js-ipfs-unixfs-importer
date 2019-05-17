@@ -19,7 +19,7 @@ describe('chunker: rabin browser', () => {
     try {
       await all(chunker())
     } catch (err) {
-      expect(err.code).to.equal('EUNSUPPORTED')
+      expect(err.code).to.equal('ERR_UNSUPPORTED')
     }
   })
 })

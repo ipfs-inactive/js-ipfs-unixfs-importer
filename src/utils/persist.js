@@ -17,6 +17,10 @@ const persist = async (node, ipld, options) => {
     options.cidVersion = 1
   }
 
+  if (options.format) {
+    options.codec = options.format
+  }
+
   const format = mc[options.codec.toUpperCase().replace(/-/g, '_')]
 
   return ipld.put(node, format, options)
