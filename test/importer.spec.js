@@ -142,7 +142,7 @@ const strategyOverrides = {
       path: 'foo/bar',
       type: 'directory'
     },
-    'foo': {
+    foo: {
       cid: 'Qme4A8fZmwfZESappfPcxSMTZVACiEzhHKtYRMuM1hbkDp',
       size: 0,
       path: 'foo',
