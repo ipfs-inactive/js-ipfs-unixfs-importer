@@ -65,7 +65,7 @@
     "multicodec": "~0.5.1",
     "multihashing-async": "~0.7.0",
     "superstruct": "~0.6.1",
-    "rabin-wasm": "^0.0.4"
+    "rabin-wasm": "~0.0.4"
   },
   "contributors": [
     "Alan Shaw <alan.shaw@protocol.ai>",
