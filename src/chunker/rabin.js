@@ -2,6 +2,7 @@
 
 const BufferList = require('bl')
 const { create } = require('rabin-wasm')
+const errcode = require('err-code')
 
 module.exports = async function * rabinChunker (source, options) {
   const rabin = jsRabin()
@@ -16,6 +17,19 @@ module.exports = async function * rabinChunker (source, options) {
     avg = options.avgChunkSize
     min = avg / 3
     max = avg + (avg / 2)
+  }
+
+  // validate min/max/avg in the same way as go
+  if (min < 16) {
+    throw errcode(new Error('rabin min must be greater than 16'), 'ERR_INVALID_MIN_CHUNK_SIZE')
+  }
+
+  if (max < min) {
+    max = min
+  }
+
+  if (avg < min) {
+    avg = min
   }
 
   const sizepow = Math.floor(Math.log2(avg))
