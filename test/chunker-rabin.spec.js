@@ -99,6 +99,21 @@ describe('chunker: rabin', function () {
     }
   })
 
+  it('throws when avg chunk size is not specified', async () => {
+    const opts = {
+      ...defaultOptions,
+      avgChunkSize: undefined
+    }
+
+    try {
+      await all(chunker([], opts))
+      throw new Error('Should have thrown')
+    } catch (err) {
+      expect(err.code).to.equal('ERR_INVALID_AVG_CHUNK_SIZE')
+    }
+  })
+
+
   it('uses the min chunk size when max and avg are too small', async () => {
     let file = Buffer.concat([rawFile, Buffer.from('hello')])
     const opts = {

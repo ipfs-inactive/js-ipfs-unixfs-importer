@@ -13,6 +13,8 @@ module.exports = async function * rabinChunker (source, options) {
     avg = options.avgChunkSize
     min = options.minChunkSize
     max = options.maxChunkSize
+  } else if (!options.avgChunkSize) {
+    throw errcode(new Error('please specify an average chunk size'), 'ERR_INVALID_AVG_CHUNK_SIZE')
   } else {
     avg = options.avgChunkSize
     min = avg / 3
