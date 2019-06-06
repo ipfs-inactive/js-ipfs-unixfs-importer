@@ -113,7 +113,6 @@ describe('chunker: rabin', function () {
     }
   })
 
-
   it('uses the min chunk size when max and avg are too small', async () => {
     let file = Buffer.concat([rawFile, Buffer.from('hello')])
     const opts = {
