@@ -41,11 +41,7 @@ describe('chunker: rabin', function () {
     expect(size).to.equal(b1.length + b2.length + b3.length)
 
     chunks.forEach((chunk, index) => {
-      if (index === chunks.length - 1) {
-        expect(chunk.length).to.equal(128)
-      } else {
-        expect(chunk.length).to.equal(192)
-      }
+      expect(chunk.length < 193 && chunk.length > 96)
     })
   })
 
