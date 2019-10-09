@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-env mocha */
 'use strict'
 
@@ -25,7 +26,7 @@ const CHUNK_SIZE = 65536
 
 describe('benchmark', function () {
   this.timeout(0)
-  it.only('single run 500mb without batch', async () => { // eslint-disable-line no-loop-func
+  it('single run 500mb without batch', async () => { // eslint-disable-line no-loop-func
     const ipld = await createIPLD()
     const times = []
     let read = 0
@@ -33,6 +34,8 @@ describe('benchmark', function () {
     let lastPercent = 0
 
     const options = {
+      batchInterval: 50,
+      batch: false,
       progress: (prog) => {
         read += prog
         const percent = parseInt((read / FILE_SIZE) * 100)
@@ -59,7 +62,7 @@ describe('benchmark', function () {
     // })
   })
 
-  it.only('single run 500mb with batch 50ms', async () => { // eslint-disable-line no-loop-func
+  it('single run 500mb with batch 50ms', async () => { // eslint-disable-line no-loop-func
     const ipld = await createIPLD()
 
     const options = {
@@ -78,7 +81,7 @@ describe('benchmark', function () {
     }], ipld, options))
   })
 
-  it.only('single run 500mb with batch 100ms', async () => { // eslint-disable-line no-loop-func
+  it('single run 500mb with batch 100ms', async () => { // eslint-disable-line no-loop-func
     const ipld = await createIPLD()
 
     const options = {

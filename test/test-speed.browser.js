@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-env mocha */
 'use strict'
 
@@ -11,6 +12,7 @@ const BlockService = require('ipfs-block-service')
 const { openDB } = require('idb')
 
 // Run benchmarkjs in the browser https://github.com/bestiejs/benchmark.js/issues/128#issuecomment-271615298
+// We need to change Karma webpack config according to the above link
 const _ = require('lodash')
 const process = require('process')
 const benchmark = require('benchmark')
@@ -38,6 +40,7 @@ describe('benchmark', function () {
     let lastPercent = 0
 
     const options = {
+      batch: false,
       progress: (prog) => {
         read += prog
         const percent = parseInt((read / FILE_SIZE) * 100)
@@ -139,7 +142,7 @@ describe('benchmark', function () {
   const sizes = [10, 50, 100]
 
   for (const size of sizes) {
-    it.only(`benchmark ${size}mb`, (done) => {
+    it(`benchmark ${size}mb`, (done) => {
       const suite = new Benchmark.Suite()
       const FILE_SIZE = Math.pow(2, 20) * size
 
