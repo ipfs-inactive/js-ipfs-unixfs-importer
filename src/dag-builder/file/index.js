@@ -5,7 +5,8 @@ const errCode = require('err-code')
 const UnixFS = require('ipfs-unixfs')
 const mh = require('multihashes')
 const mc = require('multicodec')
-const interval = require('interval-promise')
+const { setIntervalAsync } = require('set-interval-async/dynamic')
+const { clearIntervalAsync } = require('set-interval-async')
 const persist = require('../../utils/persist')
 const {
   DAGNode,
@@ -66,7 +67,7 @@ async function * buildFile (source, ipld, options) {
 }
 
 const serialize = (node, ipld, options) => {
-  if ((!options.codec && node.length) || options.rawLeaves) {
+  if (!options.codec && node.length) {
     options.cidVersion = 1
     options.codec = 'raw'
   }
@@ -93,14 +94,10 @@ async function * buildFileBatch (source, ipld, options) {
   let previous
   let nodesToPersist = []
 
-  const save = interval(async (iteration, stop) => {
-    if (nodesToPersist.length) {
-      const temp = nodesToPersist
-      nodesToPersist = []
-      await ipld.putBatch(temp, options)
-    } else {
-      stop()
-    }
+  const timer = setIntervalAsync(async () => {
+    const temp = nodesToPersist
+    nodesToPersist = []
+    await ipld.putBatch(temp, options)
   }, options.batchInterval)
 
   for await (const buffer of source) {
@@ -108,16 +105,19 @@ async function * buildFileBatch (source, ipld, options) {
     options.progress(buffer.length)
     let node
     let unixfs
-
+    const opts = { ...options }
     if (options.rawLeaves) {
       node = buffer
+      opts.codec = 'raw'
+      opts.cidVersion = 1
     } else {
       unixfs = new UnixFS(options.leafType, buffer)
       node = new DAGNode(unixfs.marshal())
     }
 
-    const result = await serialize(node, ipld, options)
+    const result = await serialize(node, ipld, opts)
     nodesToPersist.push(new Block(result[1], result[0]))
+
     const entry = {
       cid: result[0],
       unixfs,
@@ -133,9 +133,9 @@ async function * buildFileBatch (source, ipld, options) {
 
     yield entry
   }
-
   // Wait for everything to be saved
-  await save
+  await clearIntervalAsync(timer)
+  await ipld.putBatch(nodesToPersist, options)
 
   if (previous) {
     previous.single = true
