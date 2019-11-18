@@ -676,5 +676,43 @@ strategies.forEach((strategy) => {
         }
       }
     })
+
+    it('supports passing mtime', async () => {
+      this.timeout(60 * 1000)
+
+      const options = {
+        rawLeaves: true
+      }
+      const now = parseInt(Date.now() / 1000)
+
+      for await (const file of importer([{
+        path: '1.2MiB.txt',
+        content: bigFile,
+        mtime: now
+      }], ipld, options)) {
+        const node = await exporter(file.cid, ipld)
+
+        expect(node.unixfs.mtime).to.equal(now)
+      }
+    })
+
+    it('supports passing mode', async () => {
+      this.timeout(60 * 1000)
+
+      const options = {
+        rawLeaves: true
+      }
+      const mode = parseInt('0111', 8)
+
+      for await (const file of importer([{
+        path: '1.2MiB.txt',
+        content: bigFile,
+        mode
+      }], ipld, options)) {
+        const node = await exporter(file.cid, ipld)
+
+        expect(node.unixfs.mode).to.equal(mode)
+      }
+    })
   })
 })

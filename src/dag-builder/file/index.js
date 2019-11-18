@@ -81,6 +81,14 @@ const reduce = (file, ipld, options) => {
     // create a parent node and add all the leaves
     const f = new UnixFS('file')
 
+    if (options.mtime) {
+      f.mtime = options.mtime
+    }
+
+    if (options.mode) {
+      f.mode = options.mode
+    }
+
     const links = leaves
       .filter(leaf => {
         if (leaf.cid.codec === 'raw' && leaf.node.length) {

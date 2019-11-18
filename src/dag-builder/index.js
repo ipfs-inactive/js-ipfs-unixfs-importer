@@ -33,10 +33,18 @@ async function * dagBuilder (source, ipld, options) {
       const chunker = createChunker(options.chunker, validateChunks(source), options.chunkerOptions)
 
       // item is a file
-      yield fileBuilder(entry, chunker, ipld, options)
+      yield fileBuilder(entry, chunker, ipld, {
+        ...options,
+        mode: entry.mode,
+        mtime: entry.mtime
+      })
     } else {
       // item is a directory
-      yield dirBuilder(entry, ipld, options)
+      yield dirBuilder(entry, ipld, {
+        ...options,
+        mode: entry.mode,
+        mtime: entry.mtime
+      })
     }
   }
 }

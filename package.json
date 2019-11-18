@@ -55,16 +55,16 @@
     "async-iterator-all": "^1.0.0",
     "async-iterator-batch": "~0.0.1",
     "async-iterator-first": "^1.0.0",
-    "bl": "^3.0.0",
+    "bl": "^4.0.0",
     "deep-extend": "~0.6.0",
     "err-code": "^2.0.0",
     "hamt-sharding": "~0.0.2",
-    "ipfs-unixfs": "~0.1.16",
+    "ipfs-unixfs": "ipfs/js-ipfs-unixfs#add-metadata",
     "ipld-dag-pb": "^0.18.0",
     "multicodec": "~0.5.1",
-    "multihashing-async": "~0.7.0",
+    "multihashing-async": "^0.8.0",
     "rabin-wasm": "~0.0.8",
-    "superstruct": "~0.6.1"
+    "superstruct": "^0.8.2"
   },
   "contributors": [
     "Alan Shaw <alan.shaw@protocol.ai>",
