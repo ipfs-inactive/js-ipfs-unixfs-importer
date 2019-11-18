@@ -59,7 +59,7 @@
     "deep-extend": "~0.6.0",
     "err-code": "^2.0.0",
     "hamt-sharding": "~0.0.2",
-    "ipfs-unixfs": "ipfs/js-ipfs-unixfs#add-metadata",
+    "ipfs-unixfs": "^0.2.0",
     "ipld-dag-pb": "^0.18.0",
     "multicodec": "~0.5.1",
     "multihashing-async": "^0.8.0",
