@@ -141,6 +141,14 @@ async function * flush (path, bucket, ipld, options) {
   dir.fanout = bucket.tableSize()
   dir.hashType = options.hashFn.code
 
+  if (options.mtime) {
+    dir.mtime = options.mtime
+  }
+
+  if (options.mode) {
+    dir.mode = options.mode
+  }
+
   const node = new DAGNode(dir.marshal(), links)
   const cid = await persist(node, ipld, options)
 
