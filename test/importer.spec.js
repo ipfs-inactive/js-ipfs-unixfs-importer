@@ -710,6 +710,119 @@ strategies.forEach((strategy) => {
       expect(node.unixfs.mtime).to.equal(now)
     })
 
+    it('supports passing metadata for wrapping directories', async () => {
+      this.timeout(60 * 1000)
+
+      const now = parseInt(Date.now() / 1000)
+      const perms = parseInt('0777', 8)
+
+      const entries = await all(importer([{
+        path: '/foo',
+        mtime: now,
+        mode: perms
+      }, {
+        path: '/foo/bar.txt',
+        content: bigFile
+      }], ipld))
+
+      const nodes = await all(exporter.recursive(entries[entries.length - 1].cid, ipld))
+      const node = nodes.filter(node => node.unixfs.type === 'directory').pop()
+
+      if (!node) {
+        expect.fail('no directory found')
+      }
+
+      expect(node.unixfs.mtime).to.equal(now)
+      expect(node.unixfs.mode).to.equal(perms)
+    })
+
+    it('supports passing metadata for intermediate directories', async () => {
+      this.timeout(60 * 1000)
+
+      const now = parseInt(Date.now() / 1000)
+      const perms = parseInt('0777', 8)
+
+      const entries = await all(importer([{
+        path: '/foo/bar',
+        mtime: now,
+        mode: perms
+      }, {
+        path: '/foo/bar/baz.txt',
+        content: bigFile
+      }], ipld))
+
+      const nodes = await all(exporter.recursive(entries[entries.length - 1].cid, ipld))
+      const node = nodes.filter(node => node.unixfs.type === 'directory').pop()
+
+      if (!node) {
+        expect.fail('no directory found')
+      }
+
+      expect(node.unixfs.mtime).to.equal(now)
+      expect(node.unixfs.mode).to.equal(perms)
+    })
+
+    it('supports passing metadata for out of order intermediate directories', async () => {
+      this.timeout(60 * 1000)
+
+      const now = parseInt(Date.now() / 1000)
+      const perms = parseInt('0777', 8)
+
+      const entries = await all(importer([{
+        path: '/foo/bar/qux.txt',
+        content: bigFile
+      }, {
+        path: '/foo/bar',
+        mtime: now,
+        mode: perms
+      }, {
+        path: '/foo/quux'
+      }, {
+        path: '/foo/bar/baz.txt',
+        content: bigFile
+      }], ipld))
+
+      const nodes = await all(exporter.recursive(entries[entries.length - 1].cid, ipld))
+      const node = nodes.filter(node => node.unixfs.type === 'directory' && node.name === 'bar').pop()
+
+      if (!node) {
+        expect.fail('no directory found')
+      }
+
+      expect(node.unixfs.mtime).to.equal(now)
+      expect(node.unixfs.mode).to.equal(perms)
+    })
+
+    it('supports passing mtime for hamt-sharded-directories', async () => {
+      this.timeout(60 * 1000)
+
+      const now = parseInt(Date.now() / 1000)
+
+      const entries = await all(importer([{
+        path: '/foo',
+        mtime: now
+      }, {
+        path: '/foo/bar.txt',
+        content: bigFile
+      }, {
+        path: '/foo/baz.txt',
+        content: bigFile
+      }, {
+        path: '/foo/qux'
+      }], ipld, {
+        shardSplitThreshold: 0
+      }))
+
+      const nodes = await all(exporter.recursive(entries[entries.length - 1].cid, ipld))
+      const node = nodes.filter(node => node.unixfs.type === 'hamt-sharded-directory').pop()
+
+      if (!node) {
+        expect.fail('no hamt-sharded-directory found')
+      }
+
+      expect(node.unixfs.mtime).to.equal(now)
+    })
+
     it('supports passing mode', async () => {
       this.timeout(60 * 1000)
 
