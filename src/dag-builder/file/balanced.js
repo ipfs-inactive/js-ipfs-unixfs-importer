@@ -1,6 +1,6 @@
 'use strict'
 
-const batch = require('it-flat-batch')
+const batch = require('it-batch')
 
 async function * balanced (source, reduce, options) {
   yield await reduceToParents(source, reduce, options)
