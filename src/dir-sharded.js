@@ -31,7 +31,8 @@ const hashFn = async function (value) {
 hashFn.code = 0x22 // TODO: get this from multihashing-async?
 
 const defaultOptions = {
-  hashFn: hashFn
+  hamtHashFn: hashFn,
+  hamtBucketBits: 8
 }
 
 class DirSharded extends Dir {
@@ -40,7 +41,10 @@ class DirSharded extends Dir {
 
     super(props, options)
 
-    this._bucket = Bucket(options)
+    this._bucket = Bucket({
+      hashFn: options.hamtHashFn,
+      bits: options.hamtBucketBits
+    })
   }
 
   async put (name, value) {
@@ -139,7 +143,7 @@ async function * flush (path, bucket, ipld, shardRoot, options) {
   const data = Buffer.from(children.bitField().reverse())
   const dir = new UnixFS('hamt-sharded-directory', data)
   dir.fanout = bucket.tableSize()
-  dir.hashType = options.hashFn.code
+  dir.hashType = options.hamtHashFn.code
 
   if (shardRoot && shardRoot.mtime) {
     dir.mtime = shardRoot.mtime
