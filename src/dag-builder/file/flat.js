@@ -1,11 +1,11 @@
 'use strict'
 
-const batch = require('async-iterator-batch')
+const batch = require('it-flat-batch')
 
 module.exports = async function * (source, reduce) {
   const roots = []
 
-  for await (const chunk of batch(source, Infinity)) {
+  for await (const chunk of batch(source, Number.MAX_SAFE_INTEGER)) {
     roots.push(await reduce(chunk))
   }
 

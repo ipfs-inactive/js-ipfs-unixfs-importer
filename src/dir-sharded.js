@@ -9,7 +9,7 @@ const multihashing = require('multihashing-async')
 const Dir = require('./dir')
 const persist = require('./utils/persist')
 const Bucket = require('hamt-sharding')
-const extend = require('deep-extend')
+const mergeOptions = require('merge-options').bind({ ignoreUndefined: true })
 
 const hashFn = async function (value) {
   const hash = await multihashing(Buffer.from(value, 'utf8'), 'murmur3-128')
@@ -36,7 +36,7 @@ const defaultOptions = {
 
 class DirSharded extends Dir {
   constructor (props, options) {
-    options = extend({}, defaultOptions, options)
+    options = mergeOptions(defaultOptions, options)
 
     super(props, options)
 
