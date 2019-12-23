@@ -64,6 +64,7 @@ async function * treeBuilder (source, ipld, options) {
     if (!entry) {
       continue
     }
+
     tree = await addToTree(entry, tree, options)
 
     yield entry
@@ -83,13 +84,11 @@ async function * treeBuilder (source, ipld, options) {
     tree = unwrapped.child
   }
 
-  if (!tree.dir) {
+  if (!(tree instanceof Dir)) {
     return
   }
 
-  for await (const entry of tree.flush(tree.path, ipld)) {
-    yield entry
-  }
+  yield * tree.flush(tree.path, ipld)
 }
 
 module.exports = treeBuilder

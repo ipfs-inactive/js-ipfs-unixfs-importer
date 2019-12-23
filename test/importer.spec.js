@@ -29,6 +29,16 @@ function stringifyMh (files) {
   })
 }
 
+function dateToTimespec (date) {
+  const ms = date.getTime()
+  const secs = Math.floor(ms / 1000)
+
+  return {
+    secs,
+    nsecs: (ms - (secs * 1000)) * 1000
+  }
+}
+
 const baseFiles = {
   '200Bytes.txt': {
     cid: 'QmQmZQxSKQppbsWfVzBvg59Cn3DKtsNVQ94bjAxg2h3Lb8',
@@ -681,7 +691,7 @@ strategies.forEach((strategy) => {
       const options = {
         rawLeaves: true
       }
-      const now = parseInt(Date.now() / 1000)
+      const now = new Date()
 
       for await (const file of importer([{
         path: '1.2MiB.txt',
@@ -690,14 +700,14 @@ strategies.forEach((strategy) => {
       }], ipld, options)) {
         const node = await exporter(file.cid, ipld)
 
-        expect(node.unixfs.mtime).to.equal(now)
+        expect(node.unixfs.mtime).to.deep.equal(dateToTimespec(now))
       }
     })
 
     it('supports passing mtime for directories', async () => {
       this.timeout(60 * 1000)
 
-      const now = parseInt(Date.now() / 1000)
+      const now = new Date()
 
       const entries = await all(importer([{
         path: '/foo',
@@ -705,13 +715,13 @@ strategies.forEach((strategy) => {
       }], ipld))
 
       const node = await exporter(entries[0].cid, ipld)
-      expect(node.unixfs.mtime).to.equal(now)
+      expect(node.unixfs.mtime).to.deep.equal(dateToTimespec(now))
     })
 
     it('supports passing metadata for wrapping directories', async () => {
       this.timeout(60 * 1000)
 
-      const now = parseInt(Date.now() / 1000)
+      const now = new Date()
       const perms = parseInt('0777', 8)
 
       const entries = await all(importer([{
@@ -730,14 +740,14 @@ strategies.forEach((strategy) => {
         expect.fail('no directory found')
       }
 
-      expect(node.unixfs.mtime).to.equal(now)
+      expect(node.unixfs.mtime).to.deep.equal(dateToTimespec(now))
       expect(node.unixfs.mode).to.equal(perms)
     })
 
     it('supports passing metadata for intermediate directories', async () => {
       this.timeout(60 * 1000)
 
-      const now = parseInt(Date.now() / 1000)
+      const now = new Date()
       const perms = parseInt('0777', 8)
 
       const entries = await all(importer([{
@@ -756,14 +766,14 @@ strategies.forEach((strategy) => {
         expect.fail('no directory found')
       }
 
-      expect(node.unixfs.mtime).to.equal(now)
+      expect(node.unixfs.mtime).to.deep.equal(dateToTimespec(now))
       expect(node.unixfs.mode).to.equal(perms)
     })
 
     it('supports passing metadata for out of order intermediate directories', async () => {
       this.timeout(60 * 1000)
 
-      const now = parseInt(Date.now() / 1000)
+      const now = new Date()
       const perms = parseInt('0777', 8)
 
       const entries = await all(importer([{
@@ -787,14 +797,14 @@ strategies.forEach((strategy) => {
         expect.fail('no directory found')
       }
 
-      expect(node.unixfs.mtime).to.equal(now)
+      expect(node.unixfs.mtime).to.deep.equal(dateToTimespec(now))
       expect(node.unixfs.mode).to.equal(perms)
     })
 
     it('supports passing mtime for hamt-sharded-directories', async () => {
       this.timeout(60 * 1000)
 
-      const now = parseInt(Date.now() / 1000)
+      const now = new Date()
 
       const entries = await all(importer([{
         path: '/foo',
@@ -818,7 +828,7 @@ strategies.forEach((strategy) => {
         expect.fail('no hamt-sharded-directory found')
       }
 
-      expect(node.unixfs.mtime).to.equal(now)
+      expect(node.unixfs.mtime).to.deep.equal(dateToTimespec(now))
     })
 
     it('supports passing mode', async () => {
@@ -907,12 +917,19 @@ strategies.forEach((strategy) => {
       }], ipld))
 
       const node1 = await exporter(entries[0].cid, ipld)
-      expect(node1.unixfs.mode).to.equal(parseInt('0644', 8))
-      expect(node1.unixfs.mtime).to.be.undefined()
+      expect(node1.unixfs).to.have.property('mode', parseInt('0644', 8))
+      expect(node1.unixfs).to.have.deep.property('mtime', {
+        secs: 0,
+        nsecs: 0
+      })
+      expect(node1.unixfs.mtime.nsecs).to.equal(0)
 
       const node2 = await exporter(entries[1].cid, ipld)
-      expect(node2.unixfs.mode).to.equal(parseInt('0755', 8))
-      expect(node2.unixfs.mtime).to.be.undefined()
+      expect(node2.unixfs).to.have.property('mode', parseInt('0755', 8))
+      expect(node2.unixfs).to.have.deep.property('mtime', {
+        secs: 0,
+        nsecs: 0
+      })
     })
   })
 })

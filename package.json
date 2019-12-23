@@ -61,7 +61,7 @@
     "it-all": "^1.0.1",
     "it-batch": "^1.0.3",
     "it-first": "^1.0.1",
-    "it-parallel-batch": "1.0.2",
+    "it-parallel-batch": "1.0.3",
     "merge-options": "^2.0.0",
     "multicodec": "~0.5.1",
     "multihashing-async": "^0.8.0",
