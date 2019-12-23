@@ -67,7 +67,9 @@ async function * treeBuilder (source, ipld, options) {
 
     tree = await addToTree(entry, tree, options)
 
-    yield entry
+    if (!entry.unixfs || !entry.unixfs.isDirectory()) {
+      yield entry
+    }
   }
 
   if (!options.wrapWithDirectory) {
@@ -85,6 +87,10 @@ async function * treeBuilder (source, ipld, options) {
   }
 
   if (!(tree instanceof Dir)) {
+    if (tree && tree.unixfs && tree.unixfs.isDirectory()) {
+      yield tree
+    }
+
     return
   }
 
