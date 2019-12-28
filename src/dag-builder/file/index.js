@@ -19,7 +19,10 @@ const dagBuilders = {
 async function * importBuffer (file, source, ipld, options) {
   for await (const buffer of source) {
     yield async () => {
-      options.progress(buffer.length)
+      if (options.progress) {
+        options.progress(buffer.length)
+      }
+
       let node
       let unixfs
 
