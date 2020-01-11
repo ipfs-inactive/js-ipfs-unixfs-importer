@@ -27,23 +27,28 @@ async function * importBuffer (file, source, ipld, options) {
         ...options
       }
 
-      if (options.rawLeaves) {
-        node = buffer
-
-        opts.codec = 'raw'
-        opts.cidVersion = 1
+      let cid
+      if (options.fromParts) {
+        node = { length: buffer.size }
+        cid = buffer.cid
       } else {
-        unixfs = new UnixFS({
-          type: options.leafType,
-          data: buffer,
-          mtime: file.mtime,
-          mode: file.mode
-        })
+        if (options.rawLeaves) {
+          node = buffer
 
-        node = new DAGNode(unixfs.marshal())
+          opts.codec = 'raw'
+          opts.cidVersion = 1
+        } else {
+          unixfs = new UnixFS({
+            type: options.leafType,
+            data: buffer,
+            mtime: file.mtime,
+            mode: file.mode
+          })
+
+          node = new DAGNode(unixfs.marshal())
+        }
+        cid = await persist(node, ipld, opts)
       }
-
-      const cid = await persist(node, ipld, opts)
 
       return {
         cid: cid,

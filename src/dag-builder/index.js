@@ -30,7 +30,14 @@ async function * dagBuilder (source, ipld, options) {
         }
       }
 
-      const chunker = createChunker(options.chunker, validateChunks(source), options)
+      if (options.fromParts) {
+        options.rawLeaves = true
+        options.chunker = source => source
+        options.reduceSingleLeafToSelf = false
+      } else {
+        source = validateChunks(source)
+      }
+      const chunker = createChunker(options.chunker, source, options)
 
       // item is a file
       yield () => fileBuilder(entry, chunker, ipld, options)
