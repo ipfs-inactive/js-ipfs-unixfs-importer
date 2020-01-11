@@ -1,6 +1,8 @@
 'use strict'
 
-const mh = require('multihashes')
+const {
+  multihash
+} = require('multihashing-async')
 const mc = require('multicodec')
 
 const persist = (node, ipld, options) => {
@@ -14,10 +16,10 @@ const persist = (node, ipld, options) => {
   }
 
   if (isNaN(options.hashAlg)) {
-    options.hashAlg = mh.names[options.hashAlg]
+    options.hashAlg = multihash.names[options.hashAlg]
   }
 
-  if (options.hashAlg !== mh.names['sha2-256']) {
+  if (options.hashAlg !== multihash.names['sha2-256']) {
     options.cidVersion = 1
   }
 

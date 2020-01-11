@@ -4,7 +4,9 @@
 const chai = require('chai')
 chai.use(require('dirty-chai'))
 const expect = chai.expect
-const mh = require('multihashes')
+const {
+  multihash
+} = require('multihashing-async')
 const IPLD = require('ipld')
 const inMemory = require('ipld-in-memory')
 const UnixFS = require('ipfs-unixfs')
@@ -18,7 +20,7 @@ describe('builder', () => {
     ipld = await inMemory(IPLD)
   })
 
-  const testMultihashes = Object.keys(mh.names).slice(1, 40)
+  const testMultihashes = Object.keys(multihash.names).slice(1, 40)
   const opts = {
     strategy: 'flat',
     chunker: 'fixed',
@@ -48,7 +50,7 @@ describe('builder', () => {
       expect(imported).to.exist()
 
       // Verify multihash has been encoded using hashAlg
-      expect(mh.decode(imported.cid.multihash).name).to.equal(hashAlg)
+      expect(multihash.decode(imported.cid.multihash).name).to.equal(hashAlg)
 
       // Fetch using hashAlg encoded multihash
       const node = await ipld.get(imported.cid)
@@ -77,7 +79,7 @@ describe('builder', () => {
       const imported = await (await first(builder([inputFile], ipld, options)))()
 
       expect(imported).to.exist()
-      expect(mh.decode(imported.cid.multihash).name).to.equal(hashAlg)
+      expect(multihash.decode(imported.cid.multihash).name).to.equal(hashAlg)
     }
   })
 
@@ -96,7 +98,7 @@ describe('builder', () => {
 
       const imported = await (await first(builder([Object.assign({}, inputFile)], ipld, options)))()
 
-      expect(mh.decode(imported.cid.multihash).name).to.equal(hashAlg)
+      expect(multihash.decode(imported.cid.multihash).name).to.equal(hashAlg)
 
       // Fetch using hashAlg encoded multihash
       const node = await ipld.get(imported.cid)

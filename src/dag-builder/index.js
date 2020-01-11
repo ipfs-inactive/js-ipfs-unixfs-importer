@@ -2,8 +2,12 @@
 
 const dirBuilder = require('./dir')
 const fileBuilder = require('./file')
+const dagNodeBuilder = require('./dag-node')
 const createChunker = require('../chunker')
 const validateChunks = require('./validate-chunks')
+const {
+  DAGNode
+} = require('ipld-dag-pb')
 
 async function * dagBuilder (source, ipld, options) {
   for await (const entry of source) {
@@ -19,21 +23,25 @@ async function * dagBuilder (source, ipld, options) {
     }
 
     if (entry.content) {
-      let source = entry.content
+      if (DAGNode.isDAGNode(entry.content)) {
+        yield () => dagNodeBuilder(entry.path, entry.content, ipld, options)
+      } else {
+        let source = entry.content
 
-      // wrap in iterator if it is array-like or not an iterator
-      if ((!source[Symbol.asyncIterator] && !source[Symbol.iterator]) || source.length !== undefined) {
-        source = {
-          [Symbol.iterator]: function * () {
-            yield entry.content
+        // wrap in iterator if it is array-like or not an iterator
+        if ((!source[Symbol.asyncIterator] && !source[Symbol.iterator]) || source.length !== undefined) {
+          source = {
+            [Symbol.iterator]: function * () {
+              yield entry.content
+            }
           }
         }
+
+        const chunker = createChunker(options.chunker, validateChunks(source), options)
+
+        // item is a file
+        yield () => fileBuilder(entry, chunker, ipld, options)
       }
-
-      const chunker = createChunker(options.chunker, validateChunks(source), options)
-
-      // item is a file
-      yield () => fileBuilder(entry, chunker, ipld, options)
     } else {
       // item is a directory
       yield () => dirBuilder(entry, ipld, options)

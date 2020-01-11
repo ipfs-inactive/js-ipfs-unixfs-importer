@@ -19,6 +19,13 @@ const bigFile = loadFixture((isNode ? __dirname : 'test') + '/fixtures/1.2MiB.tx
 const smallFile = loadFixture((isNode ? __dirname : 'test') + '/fixtures/200Bytes.txt')
 const all = require('it-all')
 const first = require('it-first')
+const {
+  DAGNode
+} = require('ipld-dag-pb')
+const mc = require('multicodec')
+const {
+  multihash
+} = require('multihashing-async')
 
 function stringifyMh (files) {
   return files.map((file) => {
@@ -921,6 +928,24 @@ strategies.forEach((strategy) => {
 
       const node2 = await exporter(entries[1].cid, ipld)
       expect(node2).to.have.nested.property('unixfs.mode', 0o0755)
+    })
+
+    it('supports DAGNodes as content', async () => {
+      const entry = new UnixFs()
+      const node = new DAGNode(entry.marshal())
+      const cid = await ipld.put(node, mc.DAG_PB, {
+        hashAlg: multihash.names['sha2-256'],
+        cidVersion: 0
+      })
+
+      const entries = await all(importer([{
+        path: '/foo',
+        content: node
+      }], ipld, {
+        shardSplitThreshold: 0
+      }))
+
+      expect(entries).to.have.nested.deep.property('[0].cid', cid)
     })
   })
 })

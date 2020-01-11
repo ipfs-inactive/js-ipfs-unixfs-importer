@@ -105,7 +105,7 @@ The `import` function returns an async iterator takes a source async iterator th
 ```js
 {
   path: 'a name',
-  content: (Buffer or iterator emitting Buffers),
+  content: (Buffer, (async) iterator emitting Buffers or a DAGNode with a marshaled UnixFS entry as it's Data property),
   mtime: (Number representing seconds since (positive) or before (negative) the Unix Epoch),
   mode: (Number representing ugo-rwx, setuid, setguid and sticky bit)
 }
