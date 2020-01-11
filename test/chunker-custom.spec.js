@@ -9,6 +9,8 @@ const expect = chai.expect
 const IPLD = require('ipld')
 const inMemory = require('ipld-in-memory')
 
+// eslint bug https://github.com/eslint/eslint/issues/12459
+// eslint-disable-next-line require-await
 const iter = async function * () {
   yield Buffer.from('one')
   yield Buffer.from('two')
