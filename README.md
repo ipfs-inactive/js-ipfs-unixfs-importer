@@ -151,17 +151,21 @@ The input's file paths and directory structure will be preserved in the [`dag-pb
 Several aspects of the importer are overridable by specifying functions as part of the options object with these keys:
 
 - `chunkValidator` (function): Optional function that supports the signature `async function * (source, options)`
+  - This function takes input from the `content` field of imported entries. It should transform them into `Buffer`s, throwing an error if it cannot.
   - It should yield `Buffer` objects constructed from the `source` or throw an `Error`
 - `chunker` (function): Optional function that supports the signature `async function * (source, options)` where `source` is an async generator and `options` is an options object
   - It should yield `Buffer` objects.
 - `bufferImporter` (function): Optional function that supports the signature `async function * (entry, source, ipld, options)`
+  - This function should read `Buffer`s from `source` and persist them using `ipld.put` or similar
   - `entry` is the `{ path, content }` entry, `source` is an async generator that yields Buffers
   - It should yield functions that return a Promise that resolves to an object with the properties `{ cid, unixfs, size }` where `cid` is a [CID], `unixfs` is a [UnixFS] entry and `size` is a `Number` that represents the serialized size of the [IPLD] node that holds the buffer data.
   - Values will be pulled from this generator in parallel - the amount of parallelisation is controlled by the `blockWriteConcurrency` option (default: 10)
 - `dagBuilder` (function): Optional function that supports the signature `async function * (source, ipld, options)`
+  - This function should read `{ path, content }` entries from `source` and turn them into DAGs
   - It should yield a `function` that returns a `Promise` that resolves to `{ cid, path, unixfs, node }` where `cid` is a `CID`, `path` is a string, `unixfs` is a UnixFS entry and `node` is a `DAGNode`.
   - Values will be pulled from this generator in parallel - the amount of parallelisation is controlled by the `fileImportConcurrency` option (default: 50)
 - `treeBuilder` (function): Optional function that supports the signature `async function * (source, ipld, options)`
+  - This function should read `{ cid, path, unixfs, node }` entries from `source` and place them in a directory structure
   - It should yield an object with the properties `{ cid, path, unixfs, size }` where `cid` is a `CID`, `path` is a string, `unixfs` is a UnixFS entry and `size` is a `Number`.
 
 [ipld-resolver instance]: https://github.com/ipld/js-ipld-resolver
