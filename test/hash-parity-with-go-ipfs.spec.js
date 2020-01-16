@@ -25,7 +25,8 @@ const expectedHashes = {
 
 strategies.forEach(strategy => {
   const options = {
-    strategy: strategy
+    strategy: strategy,
+    rawLeaves: false
   }
 
   describe('go-ipfs interop using importer:' + strategy, () => {

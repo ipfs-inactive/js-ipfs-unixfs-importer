@@ -6,7 +6,7 @@ const mergeOptions = require('merge-options').bind({ ignoreUndefined: true })
 const defaultOptions = {
   chunker: 'fixed',
   strategy: 'balanced', // 'flat', 'trickle'
-  rawLeaves: false,
+  rawLeaves: true,
   onlyHash: false,
   reduceSingleLeafToSelf: true,
   codec: 'dag-pb',
@@ -48,7 +48,7 @@ module.exports = async function * (source, ipld, options = {}) {
     opts.rawLeaves = true
   }
 
-  // go-ifps trickle dag defaults to unixfs raw leaves, balanced dag defaults to file leaves
+  // go-ipfs trickle dag defaults to unixfs raw leaves, balanced dag defaults to file leaves
   if (options.strategy === 'trickle') {
     opts.leafType = 'raw'
     opts.reduceSingleLeafToSelf = false
@@ -56,6 +56,12 @@ module.exports = async function * (source, ipld, options = {}) {
 
   if (options.format) {
     opts.codec = options.format
+  }
+
+  if (options.leafType && options.rawLeaves == null) {
+    // if the user has specified a custom UnixFS leaf type and not specified
+    // raw leaves, really do not use raw leaves
+    opts.rawLeaves = false
   }
 
   let dagBuilder

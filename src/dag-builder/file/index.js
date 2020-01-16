@@ -53,7 +53,8 @@ const reduce = (file, ipld, options) => {
     if (leaves.length === 1 && leaves[0].single && options.reduceSingleLeafToSelf) {
       const leaf = leaves[0]
 
-      if (leaf.cid.codec === 'raw') {
+      // TODO: fix this for when onlyHash is passed
+      if (leaf.cid.codec === 'raw' && !options.onlyHash) {
         // only one leaf node which is a buffer
         const buffer = await ipld.get(leaf.cid)
 
@@ -87,8 +88,8 @@ const reduce = (file, ipld, options) => {
 
     const links = leaves
       .filter(leaf => {
-        if (leaf.cid.codec === 'raw' && leaf.size) {
-          return true
+        if (leaf.cid.codec === 'raw') {
+          return Boolean(leaf.size)
         }
 
         if (!leaf.unixfs.data && leaf.unixfs.fileSize()) {

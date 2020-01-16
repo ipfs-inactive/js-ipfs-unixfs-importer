@@ -47,7 +47,7 @@ const baseFiles = {
     path: '200Bytes.txt'
   },
   '1.2MiB.txt': {
-    cid: 'QmW7BDxEbGqxxSYVtn3peNPQgdDXbWkoQ6J1EFYAEuQV3Q',
+    cid: 'QmQLTvhjmSa7657mKdSfTjxFBdwxmK8n9tZC9Xdp9DtxWY',
     size: 1258000,
     type: 'file',
     path: '1.2MiB.txt'
@@ -64,19 +64,19 @@ const strategyBaseFiles = {
   flat: baseFiles,
   balanced: extend({}, baseFiles, {
     '1.2MiB.txt': {
-      cid: 'QmW7BDxEbGqxxSYVtn3peNPQgdDXbWkoQ6J1EFYAEuQV3Q',
+      cid: 'QmQLTvhjmSa7657mKdSfTjxFBdwxmK8n9tZC9Xdp9DtxWY',
       type: 'file'
     }
   }),
   trickle: extend({}, baseFiles, {
     '200Bytes.txt': {
-      cid: 'QmY8bwnoKAKvJ8qtyPhWNxSS6sxiGVTJ9VpdQffs2KB5pE',
+      cid: 'QmagyRwMfYhczYNv5SvcJc8xxXjZQBTTHS2jEqNMva2mYT',
       size: 200,
       type: 'file',
       path: '200Bytes.txt'
     },
     '1.2MiB.txt': {
-      cid: 'QmfAxsHrpaLLuhbqqbo9KQyvQNawMnVSwutYoJed75pnco',
+      cid: 'QmQLTvhjmSa7657mKdSfTjxFBdwxmK8n9tZC9Xdp9DtxWY',
       type: 'file'
     }
   })
@@ -91,25 +91,25 @@ const strategies = [
 const strategyOverrides = {
   balanced: {
     'foo-big': {
-      cid: 'QmaFgyFJUP4fxFySJCddg2Pj6rpwSywopWk87VEVv52RSj',
+      cid: 'QmR6jJgszuuWxVDVc4PCRa6domvNf6guQK7pboZnbwnht1',
       path: 'foo-big',
       size: 1335478,
       type: 'directory'
     },
     pim: {
-      cid: 'QmY8a78tx6Tk6naDgWCgTsd9EqGrUJRrH7dDyQhjyrmH2i',
+      cid: 'QmSA5QoZVieErY7TuQihgUiVc8BB6ZzgwnKvZSHcdTyFiK',
       path: 'pim',
       size: 1335744,
       type: 'directory'
     },
     'pam/pum': {
-      cid: 'QmY8a78tx6Tk6naDgWCgTsd9EqGrUJRrH7dDyQhjyrmH2i',
+      cid: 'QmSA5QoZVieErY7TuQihgUiVc8BB6ZzgwnKvZSHcdTyFiK',
       path: 'pam/pum',
       size: 1335744,
       type: 'directory'
     },
     pam: {
-      cid: 'QmRgdtzNx1H1BPJqShdhvWZ2D4DA2HUgZJ3XLtoXei27Av',
+      cid: 'QmTQcBCQvVR68R3r4eJwKL4VwDci1TCH5cj1njmcQ95Eif',
       path: 'pam',
       size: 2671269,
       type: 'directory'
@@ -117,25 +117,25 @@ const strategyOverrides = {
   },
   trickle: {
     'foo-big': {
-      cid: 'QmaKbhFRy9kcCbcwrLsqYHWMiY44BDYkqTCMpAxDdd2du2',
+      cid: 'QmR6jJgszuuWxVDVc4PCRa6domvNf6guQK7pboZnbwnht1',
       path: 'foo-big',
       size: 1334657,
       type: 'directory'
     },
     pim: {
-      cid: 'QmbWGdnua4YuYpWJb7fE25PRbW9GbKKLqq9Ucmnsg2gxnt',
+      cid: 'QmZmrY8nLks6N66f68c1biFpay3dSVy9PGvVRZLgT2T2gD',
       path: 'pim',
       size: 1334923,
       type: 'directory'
     },
     'pam/pum': {
-      cid: 'QmbWGdnua4YuYpWJb7fE25PRbW9GbKKLqq9Ucmnsg2gxnt',
+      cid: 'QmZmrY8nLks6N66f68c1biFpay3dSVy9PGvVRZLgT2T2gD',
       path: 'pam/pum',
       size: 1334923,
       type: 'directory'
     },
     pam: {
-      cid: 'QmSuh47G9Qm3PFv1zziojtHxqCjuurSdtWAzxLxoKJPq2U',
+      cid: 'Qmf1necujkKZHrYyj56eKFKAi9DPH8UyZg44KaTciso2Sc',
       path: 'pam',
       size: 2669627,
       type: 'directory'
@@ -147,19 +147,19 @@ const strategyOverrides = {
       type: 'file'
     },
     'foo/bar': {
-      cid: 'QmTGMxKPzSGNBDp6jhTwnZxGW6w1S9ciyycRJ4b2qcQaHK',
+      cid: 'QmcKJQd9cH6sip78HbjkGVLshjxtjfvnZ5ih169kZUK3Yg',
       size: 0,
       path: 'foo/bar',
       type: 'directory'
     },
     foo: {
-      cid: 'Qme4A8fZmwfZESappfPcxSMTZVACiEzhHKtYRMuM1hbkDp',
+      cid: 'QmQG6CVVTiz1TwnnueRMBZxB6d5WGJakRocHe4KGz5yHzg',
       size: 0,
       path: 'foo',
       type: 'directory'
     },
     'small.txt': {
-      cid: 'QmXmZ3qT328JxWtQXqrmvma2FmPp7tMdNiSuYvVJ5QRhKs',
+      cid: 'QmX2YDaeaAFbyNK4gat5jQMJhZL171n5Qummc5jcMsmXUu',
       size: 15,
       type: 'file',
       path: 'small.txt'
@@ -225,7 +225,7 @@ strategies.forEach((strategy) => {
     }),
     'foo-big': {
       path: 'foo-big',
-      cid: 'QmaFgyFJUP4fxFySJCddg2Pj6rpwSywopWk87VEVv52RSj',
+      cid: 'QmR6jJgszuuWxVDVc4PCRa6domvNf6guQK7pboZnbwnht1',
       size: 1328120,
       type: 'directory'
     },
@@ -237,7 +237,7 @@ strategies.forEach((strategy) => {
     }),
     pim: {
       path: 'pim',
-      cid: 'QmY8a78tx6Tk6naDgWCgTsd9EqGrUJRrH7dDyQhjyrmH2i',
+      cid: 'QmSA5QoZVieErY7TuQihgUiVc8BB6ZzgwnKvZSHcdTyFiK',
       size: 1328386,
       type: 'directory'
     },
@@ -248,13 +248,13 @@ strategies.forEach((strategy) => {
       type: 'directory'
     },
     'pam/pum': {
-      cid: 'QmY8a78tx6Tk6naDgWCgTsd9EqGrUJRrH7dDyQhjyrmH2i',
+      cid: 'QmSA5QoZVieErY7TuQihgUiVc8BB6ZzgwnKvZSHcdTyFiK',
       path: 'pam/pum',
       size: 1328386,
       type: 'directory'
     },
     pam: {
-      cid: 'QmRgdtzNx1H1BPJqShdhvWZ2D4DA2HUgZJ3XLtoXei27Av',
+      cid: 'QmTQcBCQvVR68R3r4eJwKL4VwDci1TCH5cj1njmcQ95Eif',
       path: 'pam',
       size: 2656553,
       type: 'directory'

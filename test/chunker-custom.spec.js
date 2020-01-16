@@ -46,7 +46,7 @@ describe('custom chunker', function () {
     for await (const part of importer([{ path: 'test', content }], inmem, {
       chunker
     })) {
-      expect(part.size).to.equal(116)
+      expect(part.size).to.equal(104)
     }
   })
 
