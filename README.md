@@ -1,3 +1,9 @@
+# 🔒 Archived <!-- omit in toc -->
+
+The contents of this repo have been merged into [ipfs/js-ipfs-unixfs](https://github.com/ipfs/js-ipfs-unixfs/tree/master/packages/ipfs-unixfs-importer).
+
+Please open [issues](https://github.com/ipfs/js-ipfs-unixfs/issues) or submit [PRs](https://github.com/ipfs/js-ipfs-unixfs/pulls) there.
+
 # ipfs-unixfs-importer <!-- omit in toc -->
 
 [![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](http://ipn.io)
